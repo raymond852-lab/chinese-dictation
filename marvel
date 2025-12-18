@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦸‍♂️ Marvel 超級英雄練字營 🦸‍♀️</title>
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+    <style>
+        body {
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            text-align: center;
+            background: url('https://i.etsystatic.com/58680120/r/il/349d35/7116978225/il_fullxfull.7116978225_fgpt.jpg') no-repeat center center fixed;
+            background-size: cover;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.85); /* 白色遮罩，讓字超清楚 */
+            z-index: -1;
+        }
+        .logo {
+            width: 220px;
+            margin: 10px auto;
+        }
+        h1 {
+            color: #e62429; /* Marvel 紅 */
+            font-size: 2.3em;
+            margin: 10px;
+            text-shadow: 2px 2px 4px #fff;
+        }
+        .instructions {
+            font-size: 1.4em;
+            margin: 20px;
+            padding: 15px 25px;
+            background: rgba(0, 102, 204, 0.9); /* 深藍底 */
+            color: white;
+            border-radius: 30px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .row {
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            max-width: 95%;
+            border: 5px solid #e62429;
+        }
+        .row h3 {
+            color: #e62429;
+            font-size: 1.6em;
+            margin-top: 0;
+        }
+        .char-wrapper {
+            display: inline-block;
+            margin: 20px;
+            text-align: center;
+        }
+        .char-box {
+            width: 140px;
+            height: 140px;
+            border: 4px solid #005f9e;
+            background: #fff;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            margin: 0 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .btn-look {
+            background: #ffd700; /* 金色，像鋼鐵人 */
+            color: #202020;
+        }
+        .btn-write {
+            background: #4CAF50; /* 綠色，像浩克 */
+        }
+        button:hover {
+            transform: scale(1.1);
+            transition: 0.2s;
+        }
+        @media (max-width: 600px) {
+            .char-box { width: 120px; height: 120px; }
+            button { padding: 10px 16px; font-size: 1.1em; }
+            .logo { width: 180px; }
+        }
+    </style>
+</head>
+<body>
+
+    <img src="https://www.freepnglogos.com/uploads/avengers-png-logo/marvel-avengers-png-logo-3.png" alt="Avengers Logo" class="logo">
+    <h1>🦸‍♂️ Marvel 超級英雄練字營 🦸‍♀️</h1>
+    <div class="instructions">
+        先按「👀 看示範」看英雄怎麼寫<br>
+        再按「✍️ 自己寫」用手指描描看！加油！你也是英雄！💪
+    </div>
+
+    <div class="row">
+        <h3>🌟 第一關：我終於找到</h3>
+        <div id="line1"></div>
+    </div>
+
+    <div class="row">
+        <h3>🍁 第二關：漂亮的樹葉（重點字）</h3>
+        <div id="line2"></div>
+    </div>
+
+    <script>
+        const sentence1 = "我終於找到";
+        const sentence2 = "漂亮的樹葉";
+
+        function setupLine(containerId, text) {
+            const container = document.getElementById(containerId);
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const uniqueId = containerId + '-' + i;
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'char-wrapper';
+
+                const charDiv = document.createElement('div');
+                charDiv.id = uniqueId;
+                charDiv.className = 'char-box';
+
+                const btnAnimate = document.createElement('button');
+                btnAnimate.innerText = "👀 看示範";
+                btnAnimate.className = "btn-look";
+
+                const btnQuiz = document.createElement('button');
+                btnQuiz.innerText = "✍️ 自己寫";
+                btnQuiz.className = "btn-write";
+
+                wrapper.appendChild(charDiv);
+                wrapper.appendChild(document.createElement('br'));
+                wrapper.appendChild(btnAnimate);
+                wrapper.appendChild(btnQuiz);
+                container.appendChild(wrapper);
+
+                const writer = HanziWriter.create(uniqueId, char, {
+                    width: 140,
+                    height: 140,
+                    padding: 10,
+                    strokeColor: '#202020',
+                    radicalColor: '#e62429', // 部首紅色
+                    showOutline: true,
+                    outlineColor: '#c0c0c0',
+                    drawingWidth: 22, // 粗筆畫，好看清
+                    strokeAnimationSpeed: 0.8, // 稍慢，適合新手
+                    highlightOnComplete: true,
+                    quizStartStrokeColor: '#005f9e'
+                });
+
+                btnAnimate.onclick = () => writer.animateCharacter();
+                btnQuiz.onclick = () => writer.quiz({
+                    onComplete: (summary) => {
+                        if (summary.totalMistakes === 0) {
+                            alert("🦸‍♂️ 哇！超級英雄！完全正確！🌟🌟🌟");
+                        } else {
+                            alert("👍 很棒！再試一次就完美了！💪");
+                        }
+                    }
+                });
+            }
+        }
+
+        setupLine('line1', sentence1);
+        setupLine('line2', sentence2);
+    </script>
+
+</body>
+</html>
