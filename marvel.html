@@ -3,117 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦸‍♂️ Marvel 超級英雄練字營 🦸‍♀️</title>
+    <title>🚀 鋼鐵人 vs 美國隊長：練字特訓 🛡️</title>
     <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
     <style>
         body {
             font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
             text-align: center;
-            background: url('https://i.etsystatic.com/58680120/r/il/349d35/7116978225/il_fullxfull.7116978225_fgpt.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background-color: #f0f0f0;
             padding: 20px;
             margin: 0;
             min-height: 100vh;
-            position: relative;
         }
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 255, 255, 0.85); /* 白色遮罩，讓字超清楚 */
-            z-index: -1;
-        }
-        .logo {
-            width: 220px;
-            margin: 10px auto;
-        }
-        h1 {
-            color: #e62429; /* Marvel 紅 */
-            font-size: 2.3em;
-            margin: 10px;
-            text-shadow: 2px 2px 4px #fff;
-        }
+        .logo { width: 180px; margin: 10px auto; }
+        h1 { color: #202020; font-size: 2.3em; margin: 10px; }
+        
         .instructions {
-            font-size: 1.4em;
+            font-size: 1.2em;
             margin: 20px;
-            padding: 15px 25px;
-            background: rgba(0, 102, 204, 0.9); /* 深藍底 */
+            padding: 15px;
+            background: #333;
             color: white;
-            border-radius: 30px;
+            border-radius: 15px;
             display: inline-block;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .row {
+
+        /* --- Iron Man Theme --- */
+        .ironman-row {
             margin: 30px auto;
-            background: white;
+            background: #aa0505; /* Iron Man Red */
             padding: 25px;
             border-radius: 20px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
             max-width: 95%;
-            border: 5px solid #e62429;
+            border: 5px solid #ffd700; /* Gold */
         }
-        .row h3 {
-            color: #e62429;
-            font-size: 1.6em;
-            margin-top: 0;
+        .ironman-row h3 { color: #ffd700; font-size: 1.8em; }
+
+        /* --- Captain America Theme --- */
+        .cap-row {
+            margin: 30px auto;
+            background: #003366; /* Cap Blue */
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            max-width: 95%;
+            border: 5px solid #bf0a0a; /* Cap Red */
         }
-        .char-wrapper {
-            display: inline-block;
-            margin: 20px;
-            text-align: center;
-        }
+        .cap-row h3 { color: white; font-size: 1.8em; }
+
+        .char-wrapper { display: inline-block; margin: 15px; text-align: center; }
         .char-box {
-            width: 140px;
-            height: 140px;
-            border: 4px solid #005f9e;
+            width: 130px; height: 130px;
             background: #fff;
-            border-radius: 15px;
+            border-radius: 10px;
             margin-bottom: 10px;
+            border: 3px solid #333;
         }
+
         button {
-            padding: 12px 20px;
+            padding: 10px 15px;
             border: none;
-            border-radius: 30px;
-            font-size: 1.2em;
+            border-radius: 20px;
             font-weight: bold;
-            color: white;
-            margin: 0 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            margin: 2px;
         }
-        .btn-look {
-            background: #ffd700; /* 金色，像鋼鐵人 */
-            color: #202020;
-        }
-        .btn-write {
-            background: #4CAF50; /* 綠色，像浩克 */
-        }
-        button:hover {
-            transform: scale(1.1);
-            transition: 0.2s;
-        }
-        @media (max-width: 600px) {
-            .char-box { width: 120px; height: 120px; }
-            button { padding: 10px 16px; font-size: 1.1em; }
-            .logo { width: 180px; }
-        }
+        .btn-look { background: #eee; color: #333; }
+        .btn-write { background: #ffd700; color: #000; } /* Iron Man Button */
+        .btn-cap-write { background: #bf0a0a; color: #fff; } /* Cap Button */
     </style>
 </head>
 <body>
 
-    <img src="https://www.freepnglogos.com/uploads/avengers-png-logo/marvel-avengers-png-logo-3.png" alt="Avengers Logo" class="logo">
-    <h1>🦸‍♂️ Marvel 超級英雄練字營 🦸‍♀️</h1>
+    <h1>🚀 英雄練字特訓 🛡️</h1>
     <div class="instructions">
-        先按「👀 看示範」看英雄怎麼寫<br>
-        再按「✍️ 自己寫」用手指描描看！加油！你也是英雄！💪
+        👀 先看示範，✍️ 再自己挑戰！
     </div>
 
-    <div class="row">
-        <h3>🌟 第一關：我終於找到</h3>
+    <div class="ironman-row">
+        <h3>🚀 第一關：鋼鐵人挑戰 (我終於找到)</h3>
         <div id="line1"></div>
     </div>
 
-    <div class="row">
-        <h3>🍁 第二關：漂亮的樹葉（重點字）</h3>
+    <div class="cap-row">
+        <h3>🛡️ 第二關：美國隊長挑戰 (漂亮的樹葉)</h3>
         <div id="line2"></div>
     </div>
 
@@ -121,8 +94,9 @@
         const sentence1 = "我終於找到";
         const sentence2 = "漂亮的樹葉";
 
-        function setupLine(containerId, text) {
+        function createHeroWriter(containerId, text, heroType) {
             const container = document.getElementById(containerId);
+            const isIronMan = heroType === 'ironman';
             
             for (let i = 0; i < text.length; i++) {
                 const char = text[i];
@@ -141,7 +115,7 @@
 
                 const btnQuiz = document.createElement('button');
                 btnQuiz.innerText = "✍️ 自己寫";
-                btnQuiz.className = "btn-write";
+                btnQuiz.className = isIronMan ? "btn-write" : "btn-cap-write";
 
                 wrapper.appendChild(charDiv);
                 wrapper.appendChild(document.createElement('br'));
@@ -150,34 +124,31 @@
                 container.appendChild(wrapper);
 
                 const writer = HanziWriter.create(uniqueId, char, {
-                    width: 140,
-                    height: 140,
+                    width: 130,
+                    height: 130,
                     padding: 10,
                     strokeColor: '#202020',
-                    radicalColor: '#e62429', // 部首紅色
+                    radicalColor: isIronMan ? '#aa0505' : '#003366', 
                     showOutline: true,
-                    outlineColor: '#c0c0c0',
-                    drawingWidth: 22, // 粗筆畫，好看清
-                    strokeAnimationSpeed: 0.8, // 稍慢，適合新手
-                    highlightOnComplete: true,
-                    quizStartStrokeColor: '#005f9e'
+                    drawingWidth: 20
                 });
 
                 btnAnimate.onclick = () => writer.animateCharacter();
                 btnQuiz.onclick = () => writer.quiz({
                     onComplete: (summary) => {
                         if (summary.totalMistakes === 0) {
-                            alert("🦸‍♂️ 哇！超級英雄！完全正確！🌟🌟🌟");
+                            alert(isIronMan ? "🚀 太棒了！你有鋼鐵人的智慧！" : "🛡️ 英雄等級的表現！隊長為你驕傲！");
                         } else {
-                            alert("👍 很棒！再試一次就完美了！💪");
+                            alert("💪 再試一次，英雄永不放棄！");
                         }
                     }
                 });
             }
         }
 
-        setupLine('line1', sentence1);
-        setupLine('line2', sentence2);
+        // Initialize the lines
+        createHeroWriter('line1', sentence1, 'ironman');
+        createHeroWriter('line2', sentence2, 'captainamerica');
     </script>
 
 </body>
