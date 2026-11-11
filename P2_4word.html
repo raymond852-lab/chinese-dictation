@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APSW | 單元一測驗 - 與動物有關的成語 (8選1)</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#e9e9e9;font-family:"PingFang HK","Microsoft JhengHei","Noto Sans TC",sans-serif;color:#111}
+  .page{max-width:900px;margin:24px auto;background:#fff;padding:36px 40px;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+  .top{border-bottom:3px double #111;padding-bottom:12px;text-align:center}
+  .top h1{margin:0;font-size:28px;letter-spacing:2px}
+  .top p{margin:6px 0 0;font-size:15px}
+  .info{margin:18px 0;display:flex;flex-wrap:wrap;gap:12px 28px;font-size:15px;border:1px solid #111;padding:12px 14px}
+  .instr{border:1px solid #111;padding:10px 14px;font-size:14px;line-height:1.7;background:#f9f9f9}
+  .q{border-bottom:1px solid #ddd;padding:18px 4px}
+  .q:last-child{border-bottom:none}
+  .q-head{display:flex;gap:12px;align-items:flex-start}
+  .num{flex:0 0 32px;width:32px;height:32px;border:1.5px solid #111;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+  .sentence{font-size:18px;line-height:1.8;margin:2px 0 12px}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:600px){.options{grid-template-columns:1fr}}
+  .opt{border:1.5px solid #bbb;padding:10px 12px;cursor:pointer;display:flex;gap:10px;align-items:center;font-size:17px;background:#fff}
+  .opt:hover{border-color:#111}
+  .opt input{accent-color:#111;width:18px;height:18px;cursor:pointer}
+  .opt.selected{border-color:#111;background:#f5f5f5;font-weight:700}
+  .opt.correct{border-color:#0a7a42;background:#eafff1}
+  .opt.wrong{border-color:#c00;background:#fff0f0}
+  .mark{font-size:13px;color:#555}
+  .feedback{font-size:15px;margin-top:10px;display:none;line-height:1.6}
+  .feedback.show{display:block}
+  .feedback.correct{color:#0a7a42}
+  .feedback.wrong{color:#c00}
+  .actions{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  button{font-size:16px;padding:11px 22px;cursor:pointer;border:1.5px solid #111;background:#111;color:#fff;font-family:inherit}
+  button.secondary{background:#fff;color:#111}
+  button:hover{opacity:.88}
+  #result{display:none;margin-top:20px;border:2px solid #111;padding:16px;text-align:center}
+  #result h2{margin:0 0 8px;font-size:22px}
+  #result p{margin:4px 0;font-size:16px}
+  .footer{margin-top:18px;text-align:center;font-size:14px;letter-spacing:4px}
+  @media(max-width:600px){.page{padding:22px 18px;margin:0}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <h1>APSW　｜　單元一測驗</h1>
+    <p>科目：中文科　｜　單元：與動物有關的成語　｜　每題 8 選 1</p>
+  </div>
+  <div class="info">
+    <span>姓名：________________</span>
+    <span>班別：________</span>
+    <span>學號：________</span>
+    <span>日期：________________</span>
+    <span>時間：20分鐘</span>
+    <span>總分：24分</span>
+  </div>
+  <div class="instr">
+    <b>試卷指示</b><br>
+    每題有 8 個選項，請選出最適當的一個成語，圈出答案。每題2分，共24分。考試期間不得發問，不得偷看答案。
+  </div>
+  <div id="questions"></div>
+  <div class="actions">
+    <button onclick="check()">交卷 / 對答案</button>
+    <button class="secondary" onclick="resetQuiz()">重新考試</button>
+  </div>
+  <div id="result">
+    <h2 id="scoreTitle">成績</h2>
+    <p id="scoreText"></p>
+    <p id="scoreMsg"></p>
+  </div>
+  <div class="footer">—　試卷完　—</div>
+</div>
+<script>
+const data = [
+  { s: "報告已經寫好，不要再", e: "了。", a: "畫蛇添足" },
+  { s: "她", e: "地靠在媽媽身邊。", a: "小鳥依人" },
+  { s: "這次比賽只是", e: "，實力還未盡顯。", a: "牛刀小試" },
+  { s: "不要", e: "，要看清整件事才下結論。", a: "盲人摸象" },
+  { s: "他加入球隊，真是", e: "。", a: "如虎添翼" },
+  { s: "不要", e: "，要主動去爭取。", a: "守株待兔" },
+  { s: "他自以為是，真是", e: "。", a: "井底之蛙" },
+  { s: "警方用計", e: "，成功捉到疑犯。", a: "調虎離山" },
+  { s: "旅行時", e: "，甚麼也記不住。", a: "走馬看花" },
+  { s: "做功課不要", e: "，要堅持到最後。", a: "虎頭蛇尾" },
+  { s: "考試時，課室裡", e: "。", a: "鴉雀無聲" },
+  { s: "雖然考差了，", e: "，現在努力還來得及。", a: "亡羊補牢" }
+];
+const all = data.map(d=>d.a);
+function shuffled(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+const wrap=document.getElementById("questions");
+data.forEach((q,i)=>{
+  // 8 options: correct + 7 distractors from other 11
+  const others = shuffled(all.filter(x=>x!==q.a)).slice(0,7);
+  const opts = shuffled([q.a, ...others]);
+  const letters = ["A","B","C","D","E","F","G","H"];
+  let optsHtml = opts.map((opt,idx)=>`
+    <label class="opt" data-q="${i}" data-val="${opt}">
+      <input type="radio" name="q${i}" value="${opt}"> <b>${letters[idx]}.</b> ${opt}
+    </label>`).join("");
+  const div=document.createElement("div");
+  div.className="q";
+  div.innerHTML=`
+    <div class="q-head">
+      <div class="num">${i+1}</div>
+      <div style="flex:1">
+        <div class="sentence">${i+1}. ${q.s} ________ ${q.e} <span class="mark">（2分）</span></div>
+        <div class="options">${optsHtml}</div>
+        <div class="feedback" id="fb-${i}"></div>
+      </div>
+    </div>`;
+  wrap.appendChild(div);
+});
+// highlight selected
+document.addEventListener("change", e=>{
+  if(e.target.type==="radio"){
+    const name=e.target.name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r=>{
+      r.closest(".opt").classList.remove("selected");
+    });
+    e.target.closest(".opt").classList.add("selected");
+  }
+});
+function check(){
+  let correct=0;
+  data.forEach((q,i)=>{
+    const checked=document.querySelector(`input[name="q${i}"]:checked`);
+    const fb=document.getElementById("fb-"+i);
+    const user=checked?checked.value:"";
+    // mark all options
+    document.querySelectorAll(`label[data-q="${i}"]`).forEach(l=>{
+      l.classList.remove("correct","wrong");
+      if(l.dataset.val===q.a) l.classList.add("correct");
+      if(user && l.dataset.val===user && user!==q.a) l.classList.add("wrong");
+    });
+    if(user===q.a){ correct++; fb.className="feedback show correct"; fb.textContent="✓ 答啱咗"; }
+    else { fb.className="feedback show wrong"; fb.textContent = user ? `✗ 你揀咗「${user}」，正確答案：「${q.a}」` : `✗ 未作答，正確答案：「${q.a}」`; }
+  });
+  const res=document.getElementById("result");
+  res.style.display="block";
+  document.getElementById("scoreTitle").textContent=`成績： ${correct} / 12 題`;
+  document.getElementById("scoreText").textContent=`總分：${correct*2} / 24 分`;
+  let msg= correct===12 ? "全部答啱！好叻！" : correct>=9 ? "做得好好，爭少少就滿分！" : correct>=6 ? "繼續努力，溫多幾次就熟！" : "唔好灰心，睇返課本再試一次！";
+  document.getElementById("scoreMsg").textContent=msg;
+  res.scrollIntoView({behavior:"smooth"});
+}
+function resetQuiz(){
+  document.querySelectorAll('input[type="radio"]').forEach(r=>r.checked=false);
+  document.querySelectorAll(".opt").forEach(o=>o.classList.remove("selected","correct","wrong"));
+  document.querySelectorAll(".feedback").forEach(f=>{f.className="feedback"; f.textContent="";});
+  document.getElementById("result").style.display="none";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+</script>
+</body>
+</html>
