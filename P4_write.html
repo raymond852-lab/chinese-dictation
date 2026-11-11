@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<title>P4中文 · 寫字練習</title>
+<style>
+:root {
+  --orange: #FF6B35;
+  --pink: #FF4D8D;
+  --yellow: #FFD166;
+  --green: #06D6A0;
+  --blue: #4CC9F0;
+  --purple: #9B5DE5;
+  --ink: #1F2937;
+  --muted: #6B7280;
+  --radius: 20px;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "Heiti TC", sans-serif;
+  margin: 0;
+  background: linear-gradient(160deg, #FFF5F7 0%, #F0F9FF 40%, #FFFBEB 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+  line-height: 1.55;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 100vh;
+}
+.wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 16px 14px 50px;
+}
+header { text-align: center; margin-bottom: 8px; }
+.pills {
+  display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-bottom: 8px;
+}
+.pill {
+  display: inline-block; border-radius: 999px; padding: 5px 13px;
+  font-size: 12px; font-weight: 700; color: #fff;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+.pill:nth-child(1) { background: linear-gradient(135deg, #FF6B35, #FF9F1C); }
+.pill:nth-child(2) { background: linear-gradient(135deg, #FF4D8D, #FF8FAB); }
+.pill:nth-child(3) { background: linear-gradient(135deg, #4CC9F0, #4895EF); }
+.pill:nth-child(4) { background: linear-gradient(135deg, #9B5DE5, #C77DFF); }
+
+h1 {
+  font-size: 26px; margin: 6px 0 4px; font-weight: 900;
+  background: linear-gradient(90deg, #FF6B35, #FF4D8D, #9B5DE5);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.subtitle { color: var(--muted); font-size: 13px; margin: 0 0 12px; line-height: 1.55; }
+
+.progress-area {
+  background: #fff; border-radius: 16px; padding: 11px 13px;
+  box-shadow: 0 8px 24px rgba(255,107,53,0.1); border: 2px solid #FFE4D6; margin-bottom: 12px;
+}
+.bar { height: 14px; background: #F3F4F6; border-radius: 999px; overflow: hidden; }
+.bar > div {
+  height: 100%; background: linear-gradient(90deg, #FF6B35, #FFD166, #06D6A0);
+  width: 0%; transition: width 0.35s cubic-bezier(0.34,1.56,0.64,1); border-radius: 999px;
+}
+#status { font-size: 13px; color: #4B5563; text-align: center; margin-top: 7px; font-weight: 700; }
+
+.card {
+  background: #fff; border: 2.5px solid #FFE4D6; border-radius: var(--radius);
+  padding: 18px 14px; margin: 14px 0; box-shadow: 0 10px 28px rgba(255,107,53,0.1);
+  position: relative; overflow: hidden;
+}
+.card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+  background: linear-gradient(90deg, #FF6B35, #FF4D8D, #9B5DE5, #4CC9F0);
+}
+
+.qtitle { font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.badge {
+  font-size: 11px; background: linear-gradient(135deg, #FF6B35, #FF9F1C);
+  color: #fff; padding: 3px 9px; border-radius: 7px; font-weight: 700;
+}
+.word-display {
+  font-size: 42px; font-weight: 900; text-align: center; margin: 12px 0 6px;
+  letter-spacing: 6px; color: #1F2937;
+}
+.tip-box {
+  background: linear-gradient(135deg, #FFF7ED, #FEF3C7);
+  border: 2px solid #FDE68A; border-radius: 14px; padding: 11px 13px;
+  margin: 10px 0; font-size: 14px; line-height: 1.65;
+}
+.tip-box b { color: #92400E; }
+.red { color: #DC2626; font-weight: 800; }
+
+.bigchar {
+  font-size: 92px; font-weight: 900; text-align: center; line-height: 1.1;
+  margin: 8px 0 4px; user-select: none; letter-spacing: 4px;
+}
+.char-progress {
+  text-align: center; font-weight: 800; font-size: 14px; color: #7C3AED; margin-bottom: 4px;
+}
+
+canvas {
+  touch-action: none; background: #fff; border: 3px solid #FF6B35;
+  border-radius: 16px; width: 100%; max-width: 320px; height: 320px;
+  display: block; margin: 10px auto; box-shadow: 0 6px 16px rgba(255,107,53,0.15);
+}
+
+.btn {
+  background: #1F2937; color: #fff; border: 0; border-radius: 999px;
+  padding: 12px 22px; font-size: 15px; font-weight: 800; cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s; touch-action: manipulation;
+  box-shadow: 0 4px 0 #111;
+}
+.btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #111; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+.btn2 {
+  background: linear-gradient(135deg, #FF6B35, #FF9F1C); box-shadow: 0 4px 0 #E85D04;
+}
+.btn2:active { box-shadow: 0 2px 0 #E85D04; }
+.btn3 {
+  background: linear-gradient(135deg, #06D6A0, #2EC4B6); box-shadow: 0 4px 0 #0D9488;
+}
+.btn3:active { box-shadow: 0 2px 0 #0D9488; }
+.btn-ghost {
+  background: #fff; color: #1F2937; border: 2.5px solid #1F2937; box-shadow: 0 3px 0 #1F2937;
+}
+.btn-ghost:active { box-shadow: 0 1px 0 #1F2937; }
+.btn-row {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; justify-content: center;
+}
+.mode-btns {
+  display: flex; gap: 7px; justify-content: center; flex-wrap: wrap; margin: 8px 0;
+}
+.mode-btns .btn { padding: 9px 14px; font-size: 13px; }
+
+.speak-btn {
+  background: linear-gradient(135deg, #E0F2FE, #BAE6FD); color: #0369A1;
+  border: 2px solid #7DD3FC; border-radius: 999px; padding: 7px 14px;
+  font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 2px 0 #0EA5E9;
+}
+.speak-btn:active { transform: translateY(1px); }
+
+.word-list {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 12px 0;
+}
+.word-chip {
+  background: #fff; border: 2px solid #FFD6A5; border-radius: 12px;
+  padding: 8px 12px; font-size: 15px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 2px 0 #FDBA74; transition: transform 0.1s;
+}
+.word-chip:active { transform: translateY(1px); }
+.word-chip.done { background: #D1FAE5; border-color: #34D399; box-shadow: 0 2px 0 #10B981; }
+.word-chip.current { background: #FEF3C7; border-color: #FBBF24; box-shadow: 0 2px 0 #F59E0B; }
+
+.hide { display: none !important; }
+.footer-note {
+  text-align: center; font-size: 12px; color: #9CA3AF; margin-top: 22px; line-height: 1.6;
+}
+@keyframes pop {
+  0% { transform: scale(0.93); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.pop { animation: pop 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+.done-msg {
+  text-align: center; padding: 24px 12px;
+}
+.score-big {
+  font-size: 40px; font-weight: 900;
+  background: linear-gradient(90deg, #FF6B35, #FF4D8D);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="pills">
+      <span class="pill">P4 中文</span>
+      <span class="pill">寫字練習</span>
+      <span class="pill">結構提示</span>
+      <span class="pill">易錯提醒</span>
+    </div>
+    <h1>✨ 寫字練習 · 教你正確寫字 ✨</h1>
+    <p class="subtitle">逐個詞練習 · 每個字都有結構提示和易錯提醒<br>寫完一個字再按「完成這個字」</p>
+  </header>
+
+  <div class="progress-area">
+    <div class="bar"><div id="prog"></div></div>
+    <div id="status">已練習 0 / 47 個詞語</div>
+  </div>
+
+  <!-- Word list selection -->
+  <div id="listView" class="card">
+    <div class="qtitle">📚 選擇要練習的詞語</div>
+    <p style="font-size:13px;color:#6B7280;margin:6px 0 10px">點選一個詞語開始練習，或按「全部從頭練習」</p>
+    <div class="btn-row" style="margin-bottom:12px">
+      <button class="btn btn2" id="startAllBtn">🚀 全部從頭練習</button>
+      <button class="btn btn3" id="randomBtn">🎲 隨機一個</button>
+    </div>
+    <div class="word-list" id="wordList"></div>
+  </div>
+
+  <!-- Practice view -->
+  <div id="practiceView" class="hide"></div>
+
+  <!-- Done view -->
+  <div id="doneView" class="card hide done-msg">
+    <div style="font-size:40px;margin-bottom:6px">🌟</div>
+    <h2 style="margin:4px 0">練習完成！</h2>
+    <div class="score-big" id="doneCount"></div>
+    <p style="color:#6B7280;font-size:14px">繼續加油，寫字會愈寫愈漂亮！</p>
+    <div class="btn-row">
+      <button class="btn btn2" id="backListBtn">返回詞語列表</button>
+      <button class="btn btn3" id="restartAllBtn">再練習一次</button>
+    </div>
+  </div>
+
+  <p class="footer-note">
+    💡 寫字時可開「指導模式」看淡淡的範字<br>
+    完成每個字後按「完成這個字」→ 全部寫完才到下一個詞
+  </p>
+</div>
+
+<script>
+/* ========== 詞庫（結構提示 + 易錯） ========== */
+const WORDS = [
+  ["周圍", "周,圍", "周：外面一圈；圍：口裡有韋", "圍字裡面是韋，不要寫成幸"],
+  ["樹幹", "樹,幹", "樹：木加尌；幹：干加干", "幹字中間不要多一橫"],
+  ["眼神", "眼,神", "眼：目加艮；神：示加申", "神左邊是示字旁，不是衣"],
+  ["勇氣", "勇,氣", "勇：甬加力；氣：气加米", "勇字下面是力，不是刀"],
+  ["盼望", "盼,望", "盼：目加分；望：亡加月加王", "望字下面是王，不要寫成玉"],
+  ["似乎", "似,乎", "似：人加以；乎：上撇下了", "似字右邊是以，不要寫成以字反轉"],
+  ["響亮", "響,亮", "響：鄉加音；亮：亠加口加儿", "響字左邊是鄉，不要寫成向"],
+  ["呼喚", "呼,喚", "呼：口加乎；喚：口加奐", "喚字右邊奐，中間不要漏橫"],
+  ["沉默", "沉,默", "沉：水加冗；默：黑加犬", "默字左邊是黑，右邊是犬"],
+  ["黑漆漆", "黑,漆,漆", "黑：黑字頭；漆：水加桼", "漆字右邊是桼，不要寫成木+人"],
+  ["劇烈", "劇,烈", "劇：豦加刀；烈：列加灬", "劇字右邊是刀，不是力"],
+  ["障礙", "障,礙", "障：阜加章；礙：石加疑", "礙字右邊是疑，結構要寫清楚"],
+  ["砍倒", "砍,倒", "砍：石加欠；倒：人加到", "倒字右邊是到，不要寫成倒反"],
+  ["鋸", "鋸", "鋸：金加居", "鋸字左邊是金字旁，右邊是居"],
+  ["鏟", "鏟", "鏟：金加產", "鏟字左邊金，右邊產，不要漏筆畫"],
+  ["點燃", "點,燃", "點：占加灬；燃：火加然", "點字下面是四點，不要寫成一橫"],
+  ["睜", "睜", "睜：目加爭", "睜字右邊是爭，中間橫要寫清楚"],
+  ["盯", "盯", "盯：目加丁", "盯字左邊目，右邊丁，簡單但要端正"],
+  ["顫動", "顫,動", "顫：亶加頁；動：重加力", "顫字右邊是頁，不要寫成貝"],
+  ["動彈", "動,彈", "動：重加力；彈：弓加單", "彈字左邊是弓，右邊是單"],
+  ["歪倒", "歪,倒", "歪：不加正；倒：人加到", "歪字上面是不，下面是正"],
+  ["蘇醒", "蘇,醒", "蘇：草加穌；醒：西加星", "醒字左邊是酉，不是西"],
+  ["伸展", "伸,展", "伸：人加申；展：尸加龷加衣", "展字下面不要漏寫"],
+  ["互聯網", "互,聯,網", "互：互字；聯：耳加關；網：网加罔", "網字上面是网，下面是罔"],
+  ["資訊", "資,訊", "資：次加貝；訊：言加卂", "訊字右邊是卂，不要寫成凡"],
+  ["鏡頭", "鏡,頭", "鏡：金加竟；頭：豆加頁", "鏡字左邊金，右邊竟"],
+  ["瀏覽", "瀏,覽", "瀏：水加劉；覽：監加見", "覽字下面是見，不要寫成貝"],
+  ["資料", "資,料", "資：次加貝；料：米加斗", "料字左邊米，右邊斗"],
+  ["溝通", "溝,通", "溝：水加冓；通：辶加甬", "通字右邊是甬，不要寫成用"],
+  ["規劃", "規,劃", "規：夫加見；劃：畫加刀", "劃字右邊是刀，左邊是畫"],
+  ["限制", "限,制", "限：阜加艮；制：未加刀", "制字左邊是未，不要寫成末"],
+  ["專題", "專,題", "專：專字；題：是加頁", "題字左邊是是，右邊是頁"],
+  ["研究", "研,究", "研：石加开；究：穴加九", "研字右邊是开，不要多橫"],
+  ["研習", "研,習", "研：石加开；習：羽加白", "習字上面是羽，下面是白"],
+  ["伶俐", "伶,俐", "伶：人加令；俐：人加利", "伶字右邊是令，俐字右邊是利"],
+  ["小心翼翼", "小,心,翼,翼", "翼：羽加異", "翼字上面是羽，下面是異，兩個翼要寫一樣"],
+  ["證明", "證,明", "證：言加登；明：日加月", "證字右邊是登，不要寫成發"],
+  ["組織", "組,織", "組：糸加且；織：糸加戠", "織字右邊是戠，中間有音"],
+  ["白茸茸", "白,茸,茸", "茸：草加耳", "茸字上面是草字頭，下面是耳"],
+  ["光輝", "光,輝", "光：光字；輝：光加軍", "輝字左邊是光，右邊是軍"],
+  ["盛滿", "盛,滿", "盛：成加皿；滿：水加兩", "盛字下面是皿，不要寫成血"],
+  ["無限", "無,限", "無：無字；限：阜加艮", "無字筆畫較多，要寫端正"],
+  ["喜悅", "喜,悅", "喜：士加口加豆；悅：心加兑", "悅字左邊是豎心旁，右邊是兑"],
+  ["飛翔", "飛,翔", "飛：飛字；翔：羊加羽", "翔字左邊是羊，右邊是羽"],
+  ["擴闊", "擴,闊", "擴：手加廣；闊：門加活", "闊字裡面是活，不要寫成括"],
+  ["視野", "視,野", "視：示加見；野：里加予", "視字左邊是示字旁，右邊是見"]
+];
+
+const wordMap = {};
+WORDS.forEach((w, i) => { wordMap[w[0]] = { ...w, idx: i }; });
+
+let doneSet = new Set(JSON.parse(localStorage.getItem('p4_done') || '[]'));
+let currentIdx = 0;
+let currentChars = [];
+let currentWriteIdx = 0;
+let canvas, ctx, drawing = false, last = null;
+let practiceMode = 'list'; // list | sequential | single
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'zh-HK';
+  u.rate = 0.85;
+  window.speechSynthesis.speak(u);
+}
+
+function saveDone() {
+  localStorage.setItem('p4_done', JSON.stringify([...doneSet]));
+}
+
+function updateProgress() {
+  const pct = (doneSet.size / WORDS.length * 100);
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('status').textContent = `已練習 ${doneSet.size} / ${WORDS.length} 個詞語`;
+}
+
+function renderList() {
+  const list = document.getElementById('wordList');
+  list.innerHTML = '';
+  WORDS.forEach((w, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'word-chip' + (doneSet.has(w[0]) ? ' done' : '');
+    chip.textContent = w[0];
+    chip.onclick = () => startWord(i);
+    list.append(chip);
+  });
+  updateProgress();
+}
+
+function startWord(idx) {
+  currentIdx = idx;
+  practiceMode = 'single';
+  document.getElementById('listView').classList.add('hide');
+  document.getElementById('doneView').classList.add('hide');
+  document.getElementById('practiceView').classList.remove('hide');
+  showWord();
+}
+
+function startAll() {
+  currentIdx = 0;
+  practiceMode = 'sequential';
+  document.getElementById('listView').classList.add('hide');
+  document.getElementById('doneView').classList.add('hide');
+  document.getElementById('practiceView').classList.remove('hide');
+  showWord();
+}
+
+function startRandom() {
+  const remaining = WORDS.map((_, i) => i).filter(i => !doneSet.has(WORDS[i][0]));
+  const pool = remaining.length ? remaining : WORDS.map((_, i) => i);
+  const idx = pool[Math.floor(Math.random() * pool.length)];
+  startWord(idx);
+}
+
+function showWord() {
+  const w = WORDS[currentIdx];
+  const box = document.getElementById('practiceView');
+  box.innerHTML = '';
+  box.classList.add('pop');
+
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const title = document.createElement('div');
+  title.className = 'qtitle';
+  title.innerHTML = `第 ${currentIdx + 1} / ${WORDS.length} 個詞 <span class="badge">${doneSet.has(w[0]) ? '已練習' : '新詞'}</span>`;
+  card.append(title);
+
+  const wordDiv = document.createElement('div');
+  wordDiv.className = 'word-display';
+  wordDiv.textContent = w[0];
+  card.append(wordDiv);
+
+  const speakRow = document.createElement('div');
+  speakRow.style.textAlign = 'center';
+  speakRow.style.marginBottom = '8px';
+  const sp = document.createElement('button');
+  sp.className = 'speak-btn';
+  sp.textContent = '🔊 聽讀詞語';
+  sp.onclick = () => speak(w[0]);
+  speakRow.append(sp);
+  card.append(speakRow);
+
+  const tip = document.createElement('div');
+  tip.className = 'tip-box';
+  tip.innerHTML = `<b>結構提示：</b>${w[2]}<br><b>易錯提醒：</b><span class="red">${w[3]}</span>`;
+  card.append(tip);
+
+  const writeSec = document.createElement('div');
+  writeSec.id = 'writeArea';
+  writeSec.innerHTML = `<div class="qtitle" style="margin-top:12px">✍️ 請逐字寫出</div><div id="writeInfo"></div>`;
+  card.append(writeSec);
+
+  box.append(card);
+
+  // Prepare characters
+  currentChars = w[1].split(',').map(ch => ({ word: w[0], char: ch }));
+  currentWriteIdx = 0;
+  renderWriteChar();
+}
+
+function renderWriteChar() {
+  const info = document.getElementById('writeInfo');
+  if (!info) return;
+
+  if (currentWriteIdx >= currentChars.length) {
+    // Finished this word
+    doneSet.add(WORDS[currentIdx][0]);
+    saveDone();
+    updateProgress();
+
+    info.innerHTML = `
+      <p style="text-align:center;font-weight:800;color:#059669;font-size:16px;margin:14px 0">
+        🌈 「${WORDS[currentIdx][0]}」寫完了！
+      </p>
+      <div class="btn-row">
+        ${practiceMode === 'sequential' && currentIdx < WORDS.length - 1
+          ? `<button class="btn btn2" id="nextWordBtn">下一個詞 →</button>`
+          : ''}
+        <button class="btn btn-ghost" id="backBtn">返回列表</button>
+        ${practiceMode === 'sequential' && currentIdx >= WORDS.length - 1
+          ? `<button class="btn btn3" id="finishAllBtn">全部完成 🎉</button>`
+          : ''}
+      </div>
+    `;
+    if (document.getElementById('nextWordBtn')) {
+      document.getElementById('nextWordBtn').onclick = () => {
+        currentIdx++;
+        showWord();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+    }
+    if (document.getElementById('backBtn')) {
+      document.getElementById('backBtn').onclick = backToList;
+    }
+    if (document.getElementById('finishAllBtn')) {
+      document.getElementById('finishAllBtn').onclick = showDone;
+    }
+    return;
+  }
+
+  const item = currentChars[currentWriteIdx];
+  info.innerHTML = `
+    <div class="char-progress">第 ${currentWriteIdx + 1} / ${currentChars.length} 個字 · ${item.char}</div>
+    <div class="bigchar" id="modelChar" style="color:#E5E7EB">${item.char}</div>
+    <div class="mode-btns">
+      <button class="btn btn-ghost" id="guideBtn">👁 指導模式</button>
+      <button class="btn btn-ghost" id="hideBtn">⬜ 白板模式</button>
+      <button class="btn btn-ghost" id="clearBtn">🗑 清除</button>
+    </div>
+    <canvas id="pad" width="340" height="340"></canvas>
+    <div class="btn-row">
+      <button class="btn btn2" id="doneCharBtn">完成這個字 ✓</button>
+    </div>
+  `;
+
+  setupCanvas();
+  document.getElementById('guideBtn').onclick = () => {
+    document.getElementById('modelChar').style.color = '#E5E7EB';
+  };
+  document.getElementById('hideBtn').onclick = () => {
+    document.getElementById('modelChar').style.color = 'transparent';
+  };
+  document.getElementById('clearBtn').onclick = () => {
+    ctx.clearRect(0, 0, 340, 340);
+    drawGrid();
+  };
+  document.getElementById('doneCharBtn').onclick = () => {
+    currentWriteIdx++;
+    renderWriteChar();
+  };
+}
+
+function drawGrid() {
+  ctx.strokeStyle = '#FBCFE8';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([6, 6]);
+  ctx.beginPath();
+  ctx.moveTo(170, 0); ctx.lineTo(170, 340);
+  ctx.moveTo(0, 170); ctx.lineTo(340, 170);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#FF6B35';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(1.5, 1.5, 337, 337);
+}
+
+function setupCanvas() {
+  canvas = document.getElementById('pad');
+  ctx = canvas.getContext('2d');
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#1F2937';
+  ctx.lineWidth = 9;
+  drawGrid();
+
+  const pos = e => {
+    const r = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return {
+      x: (t.clientX - r.left) * 340 / r.width,
+      y: (t.clientY - r.top) * 340 / r.height
+    };
+  };
+
+  canvas.onpointerdown = e => {
+    e.preventDefault();
+    drawing = true;
+    last = pos(e);
+    canvas.setPointerCapture(e.pointerId);
+  };
+  canvas.onpointermove = e => {
+    if (!drawing) return;
+    const p = pos(e);
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    last = p;
+  };
+  const end = () => drawing = false;
+  canvas.onpointerup = end;
+  canvas.onpointercancel = end;
+}
+
+function backToList() {
+  document.getElementById('practiceView').classList.add('hide');
+  document.getElementById('doneView').classList.add('hide');
+  document.getElementById('listView').classList.remove('hide');
+  renderList();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showDone() {
+  document.getElementById('practiceView').classList.add('hide');
+  document.getElementById('listView').classList.add('hide');
+  document.getElementById('doneView').classList.remove('hide');
+  document.getElementById('doneCount').textContent = `${doneSet.size} / ${WORDS.length}`;
+}
+
+document.getElementById('startAllBtn').onclick = startAll;
+document.getElementById('randomBtn').onclick = startRandom;
+document.getElementById('backListBtn').onclick = backToList;
+document.getElementById('restartAllBtn').onclick = () => {
+  doneSet = new Set();
+  saveDone();
+  startAll();
+};
+
+// Init
+renderList();
+</script>
+</body>
+</html>
