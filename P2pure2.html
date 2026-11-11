@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APSW黃埔 P2中文測驗 - 標點專項</title>
+<style>
+*{box-sizing:border-box}body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;margin:0;background:#eee;color:#111}
+.page{width:210mm;min-height:297mm;background:#fff;margin:12px auto;padding:10mm 12mm;page-break-after:always;position:relative}
+@media print{body{background:#fff}.page{margin:0;box-shadow:none;page-break-after:always}}
+h1{font-size:28px;margin:0}h2{font-size:24px;margin:14px 0 8px;border-bottom:2px solid #111;padding-bottom:6px}
+.info{border:2px solid #111;padding:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:18px}
+.info div{border-bottom:1px solid #999;padding:4px 0}
+.score{width:100%;border-collapse:collapse;margin:10px 0;font-size:18px}.score td,.score th{border:1px solid #111;padding:8px;text-align:center}
+.q{font-size:22px;line-height:2.0;margin:14px 0}
+.grid{display:flex;flex-wrap:wrap;border:1px solid #111;margin:8px 0}
+.cell{width:42px;height:46px;border:1px solid #bbb;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;cursor:pointer;position:relative;user-select:none;touch-action:none}
+.cell.under::after{content:"";position:absolute;left:4px;right:4px;bottom:4px;height:4px;background:#000}
+.seg{display:inline-flex;align-items:center;white-space:nowrap}
+.opt{display:inline-flex;gap:4px;margin:0 6px;vertical-align:middle;white-space:nowrap}
+.opt button{font-size:20px;width:34px;height:34px;line-height:30px;padding:0;border:2px solid #111;background:#fff;cursor:pointer;border-radius:50%;flex-shrink:0}
+.opt button.sel{background:#111;color:#fff}
+.footer{position:absolute;bottom:10mm;left:12mm;right:12mm;display:flex;justify-content:space-between;font-size:14px;color:#555}
+.note{font-size:15px;color:#555}
+</style>
+</head>
+<body>
+
+<div class="page">
+<h1>APSW 黃埔</h1>
+<h1 style="font-size:32px;margin-top:6px">二年級中文科測驗</h1>
+<p style="font-size:20px">標點專項：專名號 · 問號 · 感嘆號 &nbsp;|&nbsp; 總分 60分 &nbsp;|&nbsp; 時間 30分鐘</p>
+<div class="info"><div>姓名：</div><div>班別：P2</div><div>學號：</div><div>日期：</div><div>得分：&nbsp;/ 60</div><div>家長簽名：</div></div>
+<h2>分數欄</h2>
+<table class="score"><tr><th>大題一</th><th>大題二</th><th>大題五</th><th>總分</th></tr><tr><td>/ 20</td><td>/ 20</td><td>/ 20</td><td>/ 60</td></tr></table>
+<p class="note">請作答。標點佔一格。</p>
+<div class="footer"><span>第1頁 / 共4頁</span><span>APSW黃埔 P2中文</span></div>
+</div>
+
+<div class="page">
+<h2>大題一 專名號 (20分) <span style="float:right;font-size:16px">姓名 ___ 班別 ___</span></h2>
+<p class="note">撳字或拖動即可畫線。</p>
+<div id="q1"></div>
+<div class="footer"><span>第2頁 / 共4頁 - 請繼續作答</span></div>
+</div>
+
+<div class="page">
+<h2>大題二 專名號 (20分) <span style="float:right;font-size:16px">姓名 ___ 班別 ___</span></h2>
+<p class="note">撳字或拖動即可畫線。</p>
+<div id="q2"></div>
+<div class="footer"><span>第3頁 / 共4頁 - 請繼續作答</span></div>
+</div>
+
+<div class="page">
+<h2>大題五 混合 (20分) 請選擇標點</h2>
+<div id="q5"></div>
+<div class="footer"><span>第4頁 / 共4頁 - 已答完，請檢查</span></div>
+</div>
+
+<script>
+function makeGrid(elId, text){
+  const el=document.getElementById(elId); el.innerHTML='';
+  const wrap=document.createElement('div'); wrap.className='grid';
+  let drawing=false;
+  [...text].forEach(ch=>{
+    const c=document.createElement('div'); c.className='cell'; c.textContent=ch;
+    c.addEventListener('pointerdown',e=>{drawing=true;c.classList.toggle('under');e.preventDefault()});
+    c.addEventListener('pointerenter',e=>{if(drawing && !c.classList.contains('under')) c.classList.add('under')});
+    wrap.appendChild(c);
+  });
+  window.addEventListener('pointerup',()=>drawing=false);
+  el.appendChild(wrap);
+}
+const q1=["我是中國人。","我在香港出生。","北京是中國的一部分。","華龍舉手了。","思華微笑了。","國強幫忙了。","家欣認識地圖。","子龍拿著雞腿。","我在香港看地圖。","中國在地圖上。"];
+const q2=["我去北京。","媽媽探望思華。","老師表揚國強。","我在中國長大。","華龍和家欣是同學。","子龍在香港出生。","我認識北京。","北京有很多旅客。"];
+const q1Div=document.getElementById('q1'); q1.forEach((s,i)=>{const d=document.createElement('div'); d.className='q'; d.innerHTML=(i+1)+'. (2分) '; const g=document.createElement('span'); g.id='q1-'+i; d.appendChild(g); q1Div.appendChild(d); makeGrid('q1-'+i,s);});
+const q2Div=document.getElementById('q2'); q2.forEach((s,i)=>{const d=document.createElement('div'); d.className='q'; d.innerHTML=(i+1)+'. (2分) '; const g=document.createElement('span'); g.id='q2-'+i; d.appendChild(g); q2Div.appendChild(d); makeGrid('q2-'+i,s);});
+
+// 大題五 - 10題, 每題2分, 每個分句後面跟一個選擇, 同一行, 不跌行
+const q5=[
+["今天我去森林","你知道森林有什麼嗎"],
+["今天我畫鬼臉","啊","我的鬼臉最漂亮"],
+["我在香港出生","你知道香港在哪裡嗎"],
+["森林裡有很多旅客","可是森林沒有旅店"],
+["房間裡有被子","啊","漂亮極了"],
+["今天我認識地圖","你知道地圖在哪裡嗎"],
+["我非常喜歡幫忙","啊","幫忙真好"],
+["華龍舉手了","你知道他為什麼舉手嗎"],
+["我在北京看地圖","啊","北京真大"],
+["今天我去森林","森林裡有很多旅客"]
+];
+const q5Div=document.getElementById('q5');
+q5.forEach((parts,i)=>{
+  const d=document.createElement('div'); d.className='q';
+  d.innerHTML=(i+1)+'. (2分) ';
+  parts.forEach(txt=>{
+    const seg=document.createElement('span'); seg.className='seg';
+    const sp=document.createElement('span'); sp.textContent=txt; seg.appendChild(sp);
+    const o=document.createElement('span'); o.className='opt';
+    ['。','？','！'].forEach(ch=>{
+      const b=document.createElement('button'); b.type='button'; b.textContent=ch;
+      b.onclick=()=>{o.querySelectorAll('button').forEach(x=>x.classList.remove('sel')); b.classList.add('sel')};
+      o.appendChild(b);
+    });
+    seg.appendChild(o); d.appendChild(seg); d.appendChild(document.createTextNode(' '));
+  });
+  q5Div.appendChild(d);
+});
+</script>
+
+<div style="text-align:center;padding:20px;background:#fff;margin:12px auto;width:210mm">
+<button id="submitBtn" style="font-size:24px;padding:12px 36px;background:#111;color:#fff;border:none;cursor:pointer;border-radius:8px">提交並對答案</button>
+<button id="resetBtn" style="font-size:20px;padding:12px 20px;background:#fff;border:2px solid #111;cursor:pointer;border-radius:8px;margin-left:10px">重做</button>
+<div id="result" style="font-size:22px;margin-top:16px;line-height:1.8;text-align:left"></div>
+</div>
+<script>
+const properNouns2=["中國","香港","北京","華龍","思華","國強","家欣","子龍"];
+const q5Expected2=[["。","？"],["。","！","！"],["。","？"],["。","。"],["。","！","！"],["。","？"],["。","！","！"],["。","？"],["。","！","！"],["。","。"]];
+document.getElementById('submitBtn').onclick=()=>{
+  let total=0, correct=0, details=[];
+  [q1,q2].forEach((arr,qi)=>{
+    arr.forEach((sentence,si)=>{
+      const grid=document.getElementById('q'+(qi+1)+'-'+si); if(!grid) return;
+      const cells=grid.querySelectorAll('.cell');
+      let expected=new Set();
+      properNouns2.forEach(pn=>{let idx=sentence.indexOf(pn); while(idx!==-1){for(let k=0;k<pn.length;k++) expected.add(idx+k); idx=sentence.indexOf(pn, idx+1);}});
+      let ok=true; cells.forEach((c,ci)=>{const has=c.classList.contains('under'); const should=expected.has(ci); if(has!==should) ok=false; c.style.background=has===should?(has?'#d1fae5':''):'#fee2e2';});
+      total+=2; if(ok) correct+=2; else details.push(`大題${qi+1}第${si+1}題 專名號錯了`);
+    });
+  });
+  const q5Div=document.getElementById('q5'); const qDivs=q5Div.querySelectorAll(':scope > div.q');
+  qDivs.forEach((d,qi)=>{const opts=d.querySelectorAll('.opt'); let ok=true; opts.forEach((o,oi)=>{const sel=o.querySelector('button.sel'); const val=sel?sel.textContent:'未選'; const exp=q5Expected2[qi][oi]; if(val!==exp) ok=false; o.querySelectorAll('button').forEach(b=>{if(b.textContent===exp) b.style.outline='2px solid #16a34a'; if(b===sel && val!==exp) b.style.outline='2px solid #dc2626';});}); total+=2; if(ok) correct+=2; else details.push(`大題五第${qi+1}題錯了，正確應為：${q5Expected2[qi].join(' ')}`);});
+  document.getElementById('result').innerHTML=`<b>得分：${correct} / ${total}</b><br>`+(details.length?details.map(x=>`• ${x}`).join('<br>'):'全部正確！好叻！');
+  window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
+};
+document.getElementById('resetBtn').onclick=()=>{location.reload()};
+</script>
+</body>
+</html>
