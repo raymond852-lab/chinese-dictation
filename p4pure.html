@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P4標點專項 - 混合練習</title>
+<style>
+*{box-sizing:border-box}body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;margin:0;background:#f3f4f6;color:#111}
+.page{width:210mm;min-height:297mm;background:#fff;margin:14px auto;padding:10mm 12mm;page-break-after:always;position:relative}
+@media print{body{background:#fff}.page{margin:0;box-shadow:none}}
+h1{font-size:28px;margin:0}h2{font-size:24px;margin:14px 0 10px;border-bottom:3px solid #111;padding-bottom:6px}
+.info{border:2px solid #111;padding:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:18px}
+.info div{border-bottom:1px solid #999;padding:4px 0}
+.score{width:100%;border-collapse:collapse;margin:10px 0;font-size:18px}.score td,.score th{border:1px solid #111;padding:8px;text-align:center}
+.card{border:2px solid #e5e7eb;border-radius:12px;padding:14px 16px;margin:14px 0;background:#fff}
+.card.wrong{border-color:#dc2626;background:#fef2f2}.card.right{border-color:#16a34a;background:#f0fdf4}
+.qnum{font-weight:900;font-size:20px;background:#111;color:#fff;padding:2px 10px;border-radius:20px;margin-right:8px}
+.qtext{font-size:22px;line-height:2.1}
+select{font-size:22px;padding:8px 10px;border:2px solid #111;border-radius:10px;background:#fff;cursor:pointer;min-width:80px;margin:0 4px}
+select.correct{border-color:#16a34a;background:#d1fae5}select.wrong{border-color:#dc2626;background:#fee2e2}
+.hint{font-size:16px;color:#555}
+.footer{position:absolute;bottom:10mm;left:12mm;right:12mm;display:flex;justify-content:space-between;font-size:14px;color:#777}
+.rule{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:17px;border:2px solid #111;border-radius:12px;padding:12px;margin:10px 0}
+.rule div{border:1px solid #ddd;border-radius:8px;padding:10px}
+</style>
+</head>
+<body>
+
+<div class="page">
+<h1>APSW 黃埔</h1>
+<h1 style="font-size:32px;margin-top:6px">四年級中文科練習</h1>
+<p style="font-size:20px">P4標點專項：混合練習（書名號《》 · 破折號 —— · 省略號 ……）&nbsp;|&nbsp; 總分 20分</p>
+<div class="info">
+  <div>姓名：</div>
+  <div>班別：P4</div>
+  <div>學號：</div>
+  <div>日期：</div>
+  <div>得分：&nbsp;/ 20</div>
+  <div>家長簽名：</div>
+</div>
+<h2>3種標點提示</h2>
+<div class="rule">
+  <div><b>《》書名號</b><br>書名、文章名<br>例：我們閱讀《運動會日記》。</div>
+  <div><b>—— 破折號</b><br>轉折、解釋、停頓<br>例：那份光輝也永遠——永遠留在心中。</div>
+  <div><b>…… 省略號</b><br>講唔完、仲有好多<br>例：那份光輝永遠留在心中……</div>
+</div>
+<table class="score">
+  <tr><th>混合練習</th><th>總分</th></tr>
+  <tr><td>/20</td><td>/20</td></tr>
+</table>
+<div class="footer"><span>第1頁 / 共2頁</span></div>
+</div>
+
+<div class="page">
+  <h2>混合練習 (20分)</h2>
+  <p class="hint">拉落嚟選一個標點。（共20題，每題1分）</p>
+  <div id="q4"></div>
+  <div class="footer"><span>第2頁 / 共2頁 - 已答完</span></div>
+</div>
+
+<div style="text-align:center;padding:22px;background:#fff;margin:12px auto;width:210mm;border-radius:12px">
+  <button id="submitBtn" style="font-size:26px;padding:14px 40px;background:#111;color:#fff;border:none;cursor:pointer;border-radius:10px">提交並對答案</button>
+  <button id="resetBtn" style="font-size:20px;padding:14px 22px;background:#fff;border:2px solid #111;cursor:pointer;border-radius:10px;margin-left:10px">重做</button>
+  <div id="result" style="font-size:22px;margin-top:16px;line-height:1.9;text-align:left"></div>
+  <div id="wrongList" style="font-size:18px;text-align:left;line-height:1.9"></div>
+</div>
+
+<script>
+function makeChoice(divId, data, opts, marks){
+  const container=document.getElementById(divId);
+  data.forEach((parts,i)=>{
+    const card=document.createElement('div'); card.className='card'; card.dataset.qi=i;
+    card.innerHTML=`<span class="qnum">${i+1}</span> <span style="font-size:16px;color:#666">${marks}分</span>`;
+    const txt=document.createElement('div'); txt.className='qtext';
+    parts.forEach(t=>{
+      const sp=document.createElement('span'); sp.textContent=t; txt.appendChild(sp);
+      const sel=document.createElement('select');
+      const def=document.createElement('option'); def.value=''; def.textContent='選標點'; sel.appendChild(def);
+      opts.forEach(ch=>{const o=document.createElement('option'); o.value=ch; o.textContent=ch; sel.appendChild(o);});
+      txt.appendChild(sel); txt.appendChild(document.createTextNode(' '));
+    });
+    card.appendChild(txt); container.appendChild(card);
+  });
+}
+
+// 混合 20題（每題1分）
+makeChoice('q4',[
+  ["我們閱讀","運動會日記",""],
+  ["那份光輝也永遠","永遠留在心中"],
+  ["那份光輝永遠留在心中"],
+  ["我們閱讀","中國地圖",""],
+  ["今天我明白了","勇氣就是光輝"],
+  ["老師叫我們閱讀","森林旅店",""],
+  ["勝利不是獎牌","而是勇氣本身"],
+  ["操場上還有很多聲音","吶喊聲","鼓聲"],
+  ["中秋晚上","我們還有很多月餅","柚子"],
+  ["那天運動會一開始","我就似乎回到終點線前"],
+  ["我們閱讀","中秋賞月",""],
+  ["月光盛滿了光輝","永遠留在心中"],
+  ["我還有很多話想說"],
+  ["今天我明白了","那份光輝永遠留在心中"],
+  ["那份光輝也永遠","永遠留在心中"],
+  ["老師說","運動會日記","是一本好書"],
+  ["那份光輝永遠","留在心中"],
+  ["操場上充滿了笑聲","加油聲"],
+  ["中秋的月亮又大又圓"],
+  ["我們一起閱讀","運動會日記",""]
+], ['《','》','——','……','。','，','！','、'], 1);
+
+const exp4=[
+  ["《","》","。"],
+  ["——","。"],
+  ["……"],
+  ["《","》","。"],
+  ["——","。"],
+  ["《","》","。"],
+  ["——","。"],
+  ["，","、","……"],
+  ["，","、","……"],
+  ["——","。"],
+  ["《","》","。"],
+  ["——","。"],
+  ["……"],
+  ["，","……"],
+  ["——","……"],
+  ["《","》","。"],
+  ["——","。"],
+  ["，","……"],
+  ["……"],
+  ["《","》","。"]
+];
+
+document.getElementById('submitBtn').onclick=()=>{
+  let total=0, correct=0;
+  const cards=document.getElementById('q4').querySelectorAll('.card');
+  cards.forEach((card,qi)=>{
+    // 清走舊答案顯示
+    const oldAns = card.querySelector('.ans-show');
+    if(oldAns) oldAns.remove();
+
+    const sels=card.querySelectorAll('select'); let ok=true;
+    sels.forEach((sel,oi)=>{
+      const val=sel.value; const e=exp4[qi][oi];
+      if(val!==e){ok=false; sel.classList.add('wrong');} else sel.classList.add('correct');
+    });
+    total+=1;
+
+    // 直接喺題目下面顯示正確答案
+    const ansDiv = document.createElement('div');
+    ansDiv.className = 'ans-show';
+    ansDiv.style.cssText = 'margin-top:10px;padding:8px 12px;border-radius:8px;font-size:18px;';
+    if(ok){
+      correct+=1;
+      card.classList.add('right');
+      ansDiv.style.background = '#d1fae5';
+      ansDiv.style.color = '#065f46';
+      ansDiv.innerHTML = `✅ 正確！答案：<b>${exp4[qi].join(' ')}</b>`;
+    } else {
+      card.classList.add('wrong');
+      ansDiv.style.background = '#fee2e2';
+      ansDiv.style.color = '#991b1b';
+      ansDiv.innerHTML = `❌ 正確答案：<b>${exp4[qi].join(' ')}</b>`;
+    }
+    card.appendChild(ansDiv);
+  });
+  document.getElementById('result').innerHTML=`<b>得分：${correct} / ${total}</b> ${correct===total?'🎉 全部正確！好叻！':'加油，再睇下錯嗰題'}`;
+  document.getElementById('wrongList').innerHTML='';
+  // 唔使滾到最底，方便睇返每題答案
+};
+document.getElementById('resetBtn').onclick=()=>{location.reload()};
+</script>
+</body>
+</html>
