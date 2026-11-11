@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<title>P2中文 · 供詞填充 · 快問快答</title>
+<style>
+:root {
+  --bg1: #FFF5F7;
+  --bg2: #F0F9FF;
+  --card: #FFFFFF;
+  --ink: #1F2937;
+  --muted: #6B7280;
+  --orange: #FF6B35;
+  --pink: #FF4D8D;
+  --yellow: #FFD166;
+  --green: #06D6A0;
+  --blue: #4CC9F0;
+  --purple: #9B5DE5;
+  --correct: #059669;
+  --wrong: #DC2626;
+  --radius: 22px;
+  --shadow: 0 10px 30px rgba(255, 107, 53, 0.12);
+}
+* { box-sizing: border-box; }
+body {
+  font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "Heiti TC", sans-serif;
+  margin: 0;
+  background: linear-gradient(160deg, #FFF5F7 0%, #F0F9FF 45%, #FFFBEB 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+  line-height: 1.55;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 100vh;
+}
+.wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 18px 16px 56px;
+}
+header {
+  text-align: center;
+  margin-bottom: 6px;
+}
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.pill {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+.pill:nth-child(1) { background: linear-gradient(135deg, #FF6B35, #FF9F1C); }
+.pill:nth-child(2) { background: linear-gradient(135deg, #FF4D8D, #FF8FAB); }
+.pill:nth-child(3) { background: linear-gradient(135deg, #4CC9F0, #4895EF); }
+.pill:nth-child(4) { background: linear-gradient(135deg, #9B5DE5, #C77DFF); }
+
+h1 {
+  font-size: 28px;
+  margin: 8px 0 6px;
+  font-weight: 900;
+  background: linear-gradient(90deg, #FF6B35, #FF4D8D, #9B5DE5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 14px;
+  line-height: 1.6;
+}
+
+.progress-area {
+  margin: 14px 0 10px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow);
+  border: 2px solid #FFE4D6;
+}
+.bar {
+  height: 16px;
+  background: #F3F4F6;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.bar > div {
+  height: 100%;
+  background: linear-gradient(90deg, #FF6B35, #FFD166, #06D6A0);
+  width: 0%;
+  transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 999px;
+}
+#status {
+  font-size: 14px;
+  color: #4B5563;
+  text-align: center;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.card {
+  background: var(--card);
+  border: 2.5px solid #FFE4D6;
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  margin: 16px 0;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #FF6B35, #FF4D8D, #9B5DE5, #4CC9F0);
+}
+
+.qtitle {
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.badge {
+  font-size: 12px;
+  background: linear-gradient(135deg, #FF6B35, #FF9F1C);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+.badge.review {
+  background: linear-gradient(135deg, #9B5DE5, #C77DFF);
+}
+
+.sent {
+  font-size: 21px;
+  line-height: 2.25;
+  margin: 16px 0 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+select {
+  font-size: 18px;
+  padding: 8px 12px;
+  border: 3px solid #FF6B35;
+  border-radius: 12px;
+  min-width: 112px;
+  background: #FFF9C4;
+  font-weight: 800;
+  margin: 0 3px;
+  vertical-align: middle;
+  color: #1F2937;
+  box-shadow: 0 3px 0 #F59E0B;
+}
+select:focus {
+  outline: none;
+  border-color: #FF4D8D;
+  box-shadow: 0 0 0 4px rgba(255, 77, 141, 0.25);
+}
+
+.btn {
+  background: #1F2937;
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 26px;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+  touch-action: manipulation;
+  box-shadow: 0 4px 0 #111;
+}
+.btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #111; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+.btn2 {
+  background: linear-gradient(135deg, #FF6B35, #FF9F1C);
+  box-shadow: 0 4px 0 #E85D04;
+}
+.btn2:active { box-shadow: 0 2px 0 #E85D04; }
+.btn3 {
+  background: linear-gradient(135deg, #06D6A0, #2EC4B6);
+  box-shadow: 0 4px 0 #0D9488;
+}
+.btn3:active { box-shadow: 0 2px 0 #0D9488; }
+.btn-ghost {
+  background: #fff;
+  color: #1F2937;
+  border: 2.5px solid #1F2937;
+  box-shadow: 0 3px 0 #1F2937;
+}
+.btn-ghost:active { box-shadow: 0 1px 0 #1F2937; }
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+  justify-content: center;
+}
+
+.feedback {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  display: none;
+}
+.feedback.ok {
+  background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+  color: #065F46;
+  display: block;
+  border: 2px solid #34D399;
+}
+.feedback.bad {
+  background: linear-gradient(135deg, #FEE2E2, #FECACA);
+  color: #991B1B;
+  display: block;
+  border: 2px solid #F87171;
+}
+
+.small {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #4B5563;
+}
+.red { color: #DC2626; font-weight: 800; }
+
+.bigchar {
+  font-size: 96px;
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.1;
+  margin: 10px 0 6px;
+  user-select: none;
+  letter-spacing: 6px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.05);
+}
+.write-meta {
+  background: linear-gradient(135deg, #FFF7ED, #FEF3C7);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin: 8px 0 12px;
+  font-size: 14px;
+  border: 2px solid #FDE68A;
+}
+.write-meta b { color: #92400E; }
+
+canvas {
+  touch-action: none;
+  background: #fff;
+  border: 3px solid #FF6B35;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 340px;
+  height: 340px;
+  display: block;
+  margin: 12px auto;
+  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.15);
+}
+
+.hide { display: none !important; }
+
+.break {
+  text-align: center;
+  padding: 28px 16px;
+}
+.clock {
+  font-size: 76px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  margin: 14px 0;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(90deg, #FF6B35, #FF4D8D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.summary-list {
+  text-align: left;
+  max-width: 440px;
+  margin: 14px auto;
+  font-size: 15px;
+}
+.summary-list li {
+  margin: 8px 0;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #FFF7ED, #FEF3C7);
+  border-radius: 12px;
+  border: 1.5px solid #FDE68A;
+  list-style: none;
+}
+.summary-list ul { padding: 0; margin: 0; }
+.score-big {
+  font-size: 52px;
+  font-weight: 900;
+  background: linear-gradient(90deg, #FF6B35, #FF4D8D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 10px 0;
+}
+.tip-box {
+  background: linear-gradient(135deg, #E0F2FE, #CFFAFE);
+  border-left: 5px solid #0EA5E9;
+  padding: 10px 14px;
+  border-radius: 0 12px 12px 0;
+  margin: 12px 0;
+  font-size: 14px;
+  display: none;
+  border: 1.5px solid #7DD3FC;
+  border-left-width: 5px;
+}
+.mode-btns {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+.mode-btns .btn {
+  padding: 10px 16px;
+  font-size: 14px;
+}
+.footer-note {
+  text-align: center;
+  font-size: 13px;
+  color: #9CA3AF;
+  margin-top: 28px;
+  line-height: 1.6;
+}
+.speak-btn {
+  background: linear-gradient(135deg, #E0F2FE, #BAE6FD);
+  color: #0369A1;
+  border: 2px solid #7DD3FC;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  margin: 4px 4px 0 0;
+  box-shadow: 0 2px 0 #0EA5E9;
+}
+.speak-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #0EA5E9; }
+
+@keyframes pop {
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.pop { animation: pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+.celebrate {
+  font-size: 42px;
+  margin: 6px 0;
+}
+.instruction {
+  background: linear-gradient(135deg, #FDF4FF, #FAE8FF);
+  border: 2px solid #E9D5FF;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #6B21A8;
+  margin: 10px 0 6px;
+  font-weight: 600;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="pills">
+      <span class="pill">P2 中文</span>
+      <span class="pill">書面語</span>
+      <span class="pill">供詞填充</span>
+      <span class="pill">快問快答</span>
+    </div>
+    <h1>✨ 供詞填充 · 快問快答 ✨</h1>
+    <p class="subtitle">
+      每一輪 20 題 · 第 1–18 題涵蓋全部 49 字 · 第 19–20 題重溫<br>
+      選完答案後，要親手寫出正確詞語，才能進入下一題！
+    </p>
+  </header>
+
+  <div class="progress-area">
+    <div class="bar"><div id="prog"></div></div>
+    <div id="status">第 1 / 20 題 · 已考字 0 / 49 · 答對 0 題</div>
+  </div>
+
+  <div id="quiz"></div>
+
+  <!-- Break screen -->
+  <div id="breakBox" class="card hide break">
+    <div class="celebrate">🎉 休息時間 🎉</div>
+    <h2 style="margin:8px 0;font-size:24px">請休息 15 分鐘</h2>
+    <p class="small">你已經完成二十題，做得非常好！</p>
+    <div class="clock" id="clock">15:00</div>
+    <div class="bar" style="max-width:280px;margin:0 auto 18px"><div id="breakProg" style="width:100%"></div></div>
+    <p class="small">請喝水、走動、看遠處、伸展身體，暫時不要看屏幕。</p>
+    <div class="btn-row">
+      <button class="btn btn-ghost" id="pauseBtn">⏸ 暫停</button>
+      <button class="btn btn-ghost" id="skipBtn">家長跳過休息</button>
+    </div>
+    <div id="breakDone" class="hide" style="margin-top:20px">
+      <button class="btn btn2" id="nextRoundBtn">🚀 休息完畢，開始下一輪</button>
+      <button class="btn" id="finishBtn" style="margin-left:8px">結束練習</button>
+    </div>
+  </div>
+
+  <!-- Done screen -->
+  <div id="doneBox" class="card hide" style="text-align:center">
+    <div class="celebrate">🌟 完成練習 🌟</div>
+    <h2 style="margin:6px 0 4px">今日做得很好！</h2>
+    <div class="score-big" id="finalScoreNum"></div>
+    <p id="finalScore" class="small"></p>
+    <div id="wrongSummary" class="summary-list"></div>
+    <div class="btn-row" style="margin-top:20px">
+      <button class="btn btn2" id="restartBtn">再開始一輪</button>
+      <button class="btn btn3" id="reviewWrongBtn">複習錯字</button>
+    </div>
+  </div>
+
+  <!-- Review wrong mode -->
+  <div id="reviewBox" class="card hide">
+    <div class="qtitle">📝 複習錯字模式</div>
+    <p class="small">只練習之前答錯的詞語。寫完全部後可返回。</p>
+    <div id="reviewContent"></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" id="exitReviewBtn">返回主畫面</button>
+    </div>
+  </div>
+
+  <p class="footer-note">
+    💡 寫字時可開「指導模式」看淡淡的範字<br>
+    完成每個字後按「完成這個字」→ 全部寫完才能下一題
+  </p>
+</div>
+
+<script>
+/* ========== 詞庫 ========== */
+const WORDS = [
+  ["鬼臉", "鬼,臉", "鬼：白色的影子加彎勾", "臉字右邊不要寫錯"],
+  ["比", "比", "兩個人並排比較", "不要寫成北"],
+  ["最", "最", "日下取物，為最", "上面日不要寫成目"],
+  ["伸", "伸", "人把手申出去", "人字要分開"],
+  ["擦", "擦", "用手察看乾淨與否", "右邊察不要漏點"],
+  ["堆", "堆", "土一塊塊堆起", "左邊土要寫得小"],
+  ["拿", "拿", "合手拿東西", "上面合不要寫成人"],
+  ["雞腿", "雞,腿", "雞：被綁住腳的鳥", "雞字右邊不要寫成鳥"],
+  ["歲", "歲", "山後有夕，一年過了長一歲", "上面山不要多一豎"],
+  ["非常", "非,常", "非常好", "非字左右要對稱"],
+  ["討", "討", "言加寸，討教", "言字上面一點不要漏"],
+  ["活潑", "活,潑", "活：水加舌；潑：水加發", "潑右邊是發，不是撥"],
+  ["好動", "好,動", "好：女加子；動：重加力", "動右邊是力，不是刀"],
+  ["總是", "總,是", "總：糸加悤", "總字糸部不要寫成系"],
+  ["探望", "探,望", "探：手伸入穴中看", "探左邊是扌，不是手"],
+  ["開始", "開,始", "開：門加開", "開字門內不要寫錯"],
+  ["換牙", "換,牙", "換：手交換", "換右邊奐不要漏橫"],
+  ["衣服", "衣,服", "衣：衣服", "衣字上面一點不要漏"],
+  ["幫忙", "幫,忙", "幫：邦加巾", "幫上面是邦"],
+  ["越", "越", "走路越過障礙", "下面戉不要寫成戊"],
+  ["奇怪", "奇,怪", "奇：大加可；怪：忄加圣", "怪右邊是圣"],
+  ["中國", "中,國", "中：中國；國：口加玉", "國內是玉，不是王"],
+  ["部分", "部,分", "部：立口分開", "部分兩個字不要寫錯位置"],
+  ["舉手", "舉,手", "舉：兩手上托", "舉字上面不要寫成與"],
+  ["理由", "理,由", "理：王加里", "理左王右里"],
+  ["頭髮", "頭,髮", "髮：頭上彎如弓", "髮不是發，髮有髟"],
+  ["皮膚", "皮,膚", "膚：月表身體", "膚左邊是月"],
+  ["所以", "所,以", "所：戶加斤", "所左戶右斤"],
+  ["香港", "香,港", "香：禾加日；港：水加巷", "港右邊巷不要漏"],
+  ["微笑", "微,笑", "微：彳加山加攵", "微中間是山"],
+  ["地圖", "地,圖", "圖：口圈地形", "圖外口要包住內部"],
+  ["幅", "幅", "幅：巾加畐，布的寬度", "幅右邊是畐，不是福"],
+  ["掛", "掛", "掛：手掛，扌加圭", "掛右邊是圭，不是主"],
+  ["認識", "認,識", "認：言加忍；識：言加只", "識右邊是只"],
+  ["帶子", "帶,子", "帶：帶子", "帶字上面不要寫成世"],
+  ["流", "流", "流：水流動，氵加㐬", "流右邊是㐬"],
+  ["北京", "北,京", "北：北；京：亠加口加小", "北京兩字大小要平均"],
+  ["來往", "來,往", "來：來；往：彳加主", "來下面是木"],
+  ["覺得", "覺,得", "覺：學加見", "覺下面是見"],
+  ["方便", "方,便", "便：人方便做事", "便右邊是更"],
+  ["辦", "辦", "辦：力加辛", "辦中間是辛，不是幸"],
+  ["房間", "房,間", "房：門後有方向的地方", "房內是方，不是万"],
+  ["牀", "牀", "牀：木加爿，大牀", "牀不是床，右邊是爿"],
+  ["擺", "擺", "擺：手分開擺，扌加罷", "擺右邊罷不要漏"],
+  ["被子", "被,子", "被：皮做成的蓋被", "被左邊是衤，不是衣"],
+  ["漂亮", "漂,亮", "漂：水加票", "漂右邊是票"],
+  ["極", "極", "極：木加亟", "極右邊亟不要漏橫"],
+  ["意見", "意,見", "意：音加心", "意下面是心"],
+  ["表揚", "表,揚", "揚：手揚起表揚", "揚右邊是昜，不是易"]
+];
+
+const QS = [
+  {"parts": ["阿剛做了", "來嚇人，要", "誰的膽子", "大。"], "answers": ["鬼臉", "比", "最"]},
+  {"parts": ["阿剛", "直雙手，", "去額頭的汗，把木頭", "成小山。"], "answers": ["伸", "擦", "堆"]},
+  {"parts": ["他", "起山上的獎品——一隻", "。"], "answers": ["拿", "雞腿"]},
+  {"parts": ["阿剛今年七", "，他", "活潑好動。"], "answers": ["歲", "非常"]},
+  {"parts": ["師父說有不明白的地方，可以去", "同學。阿剛", "，", "，總是跑去探望師父。"], "answers": ["討", "活潑", "好動"]},
+  {"parts": ["阿剛", "跑去", "師父。"], "answers": ["總是", "探望"]},
+  {"parts": ["訓練要", "了。正好阿剛在", "，新", "有點鬆。"], "answers": ["開始", "換牙", "衣服"]},
+  {"parts": ["師父來", "整理。練習", "久，身體變化", "。"], "answers": ["幫忙", "越", "奇怪"]},
+  {"parts": ["大廳裏", "同學來自", "，有的來自北京。一位同學", "說出理由。"], "answers": ["中國", "部分", "舉手"]},
+  {"parts": ["他說出", "：因為練習太多，", "都亂了，", "也被太陽曬傷了。"], "answers": ["理由", "頭髮", "皮膚"]},
+  {"parts": ["老師聽完，", "給了他休息時間。同學來自", "，聽到可以休息，就", "了。"], "answers": ["所以", "香港", "微笑"]},
+  {"parts": ["朋友送他一", "，他把", "在牆上。"], "answers": ["地圖", "幅", "掛"]},
+  {"parts": ["阿剛", "了一位新朋友，用", "繫緊地圖。地圖上畫著一條河，一直", "向北京。"], "answers": ["認識", "帶子", "流"]},
+  {"parts": ["地圖指引去", "的路。大家", "北京變得方便，大家", "應該好好佈置。"], "answers": ["北京", "來往", "覺得"]},
+  {"parts": ["來往變得", "多了，所以決定", "一個新的", "。"], "answers": ["方便", "辦", "房間"]},
+  {"parts": ["在房間裏", "了一張大", "，鋪上", "。"], "answers": ["牀", "擺", "被子"]},
+  {"parts": ["因為被子很", "，大家都", "舒服。大家互相提出", "。"], "answers": ["漂亮", "極", "意見"]},
+  {"parts": ["師父也", "了大家。"], "answers": ["表揚"]},
+  {"parts": ["阿剛想成為", "勇敢的人。"], "answers": ["最"], "review": true},
+  {"parts": ["師父說，要去", "同學。"], "answers": ["討"], "review": true}
+];
+
+const wordMap = {};
+WORDS.forEach(w => wordMap[w[0]] = w);
+
+/* ========== 狀態 ========== */
+let qi = 0, score = 0, covered = new Set(), wrongWords = [];
+let currentWriteIdx = 0, currentChars = [];
+let canvas, ctx, drawing = false, last = null;
+let reviewQueue = [];
+let reviewIdx = 0;
+
+/* ========== 工具 ========== */
+function shuffle(a) {
+  return [...a].sort(() => Math.random() - 0.5);
+}
+function choicesFor(correct) {
+  const pool = WORDS.map(w => w[0]).filter(x => x !== correct);
+  return shuffle([correct, ...shuffle(pool).slice(0, 3)]);
+}
+function speak(text, lang = 'zh-HK') {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang;
+  u.rate = 0.9;
+  window.speechSynthesis.speak(u);
+}
+function saveWrong() {
+  localStorage.setItem('p2_wrong', JSON.stringify([...new Set(wrongWords)]));
+}
+function loadWrong() {
+  try {
+    return JSON.parse(localStorage.getItem('p2_wrong') || '[]');
+  } catch { return []; }
+}
+
+/* ========== 渲染主測驗 ========== */
+function render() {
+  document.getElementById('prog').style.width = (qi / 20 * 100) + '%';
+  document.getElementById('status').textContent =
+    `第 ${Math.min(qi + 1, 20)} / 20 題 · 已考字 ${covered.size} / 49 · 答對 ${score} 題`;
+  
+  const q = QS[qi];
+  const box = document.getElementById('quiz');
+  box.innerHTML = '';
+  
+  const card = document.createElement('div');
+  card.className = 'card pop';
+  
+  const title = document.createElement('div');
+  title.className = 'qtitle';
+  title.innerHTML = `第 ${qi + 1} 題 ${q.review ? '<span class="badge review">重溫題</span>' : '<span class="badge">選擇題</span>'}`;
+  card.append(title);
+  
+  const instruction = document.createElement('div');
+  instruction.className = 'instruction';
+  instruction.textContent = '👇 請選擇適當的詞語，填在黃色空格上';
+  card.append(instruction);
+
+  // Sentence with selects
+  const sent = document.createElement('div');
+  sent.className = 'sent';
+  q.parts.forEach((p, i) => {
+    sent.append(document.createTextNode(p));
+    if (i < q.answers.length) {
+      const sel = document.createElement('select');
+      sel.id = 'sel' + i;
+      sel.innerHTML = '<option value="">請選擇</option>' +
+        choicesFor(q.answers[i]).map(c => `<option value="${c}">${c}</option>`).join('');
+      sent.append(sel);
+    }
+  });
+  card.append(sent);
+
+  // Speak + Hint row
+  const actionRow = document.createElement('div');
+  actionRow.style.margin = '10px 0 6px';
+  actionRow.style.display = 'flex';
+  actionRow.style.flexWrap = 'wrap';
+  actionRow.style.gap = '8px';
+  
+  const fullSent = q.parts.reduce((acc, p, i) => acc + p + (q.answers[i] || ''), '');
+  const speakBtn = document.createElement('button');
+  speakBtn.className = 'speak-btn';
+  speakBtn.textContent = '🔊 聽讀句子';
+  speakBtn.onclick = () => speak(fullSent.replace(/——/g, '，'));
+  actionRow.append(speakBtn);
+  
+  const tipBtn = document.createElement('button');
+  tipBtn.className = 'speak-btn';
+  tipBtn.style.background = 'linear-gradient(135deg, #FDF4FF, #F5D0FE)';
+  tipBtn.style.color = '#7E22CE';
+  tipBtn.style.borderColor = '#D8B4FE';
+  tipBtn.style.boxShadow = '0 2px 0 #A855F7';
+  tipBtn.textContent = '💡 顯示寫字提示';
+  tipBtn.onclick = () => {
+    const tips = q.answers.map(a => {
+      const m = wordMap[a];
+      return `<b>${a}</b>：${m[2]} <span class="red">（易錯：${m[3]}）</span>`;
+    }).join('<br>');
+    tipBox.innerHTML = tips;
+    tipBox.style.display = 'block';
+    tipBtn.disabled = true;
+    tipBtn.style.opacity = '0.5';
+  };
+  actionRow.append(tipBtn);
+  card.append(actionRow);
+
+  const tipBox = document.createElement('div');
+  tipBox.className = 'tip-box';
+  tipBox.id = 'tipBox';
+  card.append(tipBox);
+
+  // Submit
+  const btn = document.createElement('button');
+  btn.className = 'btn btn2';
+  btn.style.marginTop = '16px';
+  btn.style.width = '100%';
+  btn.style.maxWidth = '280px';
+  btn.style.display = 'block';
+  btn.style.marginLeft = 'auto';
+  btn.style.marginRight = 'auto';
+  btn.textContent = '✅ 提交答案';
+  
+  const fb = document.createElement('div');
+  fb.className = 'feedback';
+  
+  btn.onclick = () => {
+    const vals = q.answers.map((_, i) => document.getElementById('sel' + i).value);
+    if (vals.some(v => !v)) {
+      fb.className = 'feedback bad';
+      fb.style.display = 'block';
+      fb.textContent = '⚠️ 請先選擇全部空格的答案哦！';
+      return;
+    }
+    let ok = true;
+    vals.forEach((v, i) => { if (v !== q.answers[i]) ok = false; });
+    
+    q.answers.forEach((a, i) => {
+      covered.add(a);
+      if (vals[i] !== a && !wrongWords.includes(a)) wrongWords.push(a);
+    });
+    if (ok) score++;
+    
+    fb.className = ok ? 'feedback ok' : 'feedback bad';
+    fb.style.display = 'block';
+    if (ok) {
+      fb.innerHTML = '🎉 <b>回答正確！</b> 太棒了，現在請寫出這些字吧！';
+    } else {
+      fb.innerHTML = `😅 <b>回答錯誤。</b> 正確答案是：<b>${q.answers.join('、')}</b><br>請把正確的詞語寫出來。`;
+    }
+    btn.disabled = true;
+    document.querySelectorAll('select').forEach(s => s.disabled = true);
+    
+    const speakCorrect = document.createElement('button');
+    speakCorrect.className = 'speak-btn';
+    speakCorrect.style.marginTop = '10px';
+    speakCorrect.textContent = '🔊 聽正確詞語';
+    speakCorrect.onclick = () => speak(q.answers.join('，'));
+    fb.append(document.createElement('br'));
+    fb.append(speakCorrect);
+    
+    showWrite(q, card);
+    saveWrong();
+  };
+  
+  card.append(btn);
+  card.append(fb);
+  box.append(card);
+}
+
+/* ========== 寫字練習 ========== */
+function showWrite(q, card) {
+  const wsec = document.createElement('div');
+  wsec.style.marginTop = '20px';
+  wsec.innerHTML = `
+    <div class="qtitle">✍️ 請寫出正確詞語</div>
+    <p class="small" style="margin:6px 0 10px">在下方田字格內寫字。寫完一個字就按「完成這個字」。全部寫完才能下一題。</p>
+    <div id="writeInfo"></div>
+  `;
+  card.append(wsec);
+  
+  currentChars = [];
+  q.answers.forEach(a => {
+    const chars = wordMap[a][1].split(',');
+    chars.forEach(ch => currentChars.push({ word: a, char: ch }));
+  });
+  currentWriteIdx = 0;
+  renderWriteChar();
+}
+
+function renderWriteChar() {
+  const info = document.getElementById('writeInfo');
+  if (!info) return;
+  
+  if (currentWriteIdx >= currentChars.length) {
+    info.innerHTML = `
+      <p style="text-align:center;font-weight:800;color:#059669;font-size:17px;margin:12px 0">
+        🌈 已經寫完 ${currentChars.length} / ${currentChars.length} 個字！
+      </p>
+      <div class="btn-row">
+        <button class="btn btn2" id="nextBtn">下一題 →</button>
+      </div>
+    `;
+    document.getElementById('nextBtn').onclick = nextQ;
+    return;
+  }
+  
+  const item = currentChars[currentWriteIdx];
+  const meta = wordMap[item.word];
+  
+  info.innerHTML = `
+    <div style="text-align:center;font-weight:800;margin-bottom:6px;font-size:15px;color:#7C3AED">
+      第 ${currentWriteIdx + 1} / ${currentChars.length} 個字 · 詞語：${item.word}
+    </div>
+    <div class="bigchar" id="modelChar" style="color:#E5E7EB">${item.char}</div>
+    <div class="write-meta">
+      <b>拆字提示：</b>${meta[2]}<br>
+      <b>易抄錯：</b><span class="red">${meta[3]}</span>
+    </div>
+    <div class="mode-btns">
+      <button class="btn btn-ghost" id="guideBtn">👁 指導模式</button>
+      <button class="btn btn-ghost" id="hideBtn">⬜ 白板模式</button>
+      <button class="btn btn-ghost" id="clearBtn">🗑 清除</button>
+    </div>
+    <canvas id="pad" width="360" height="360"></canvas>
+    <div class="btn-row">
+      <button class="btn btn2" id="doneCharBtn">完成這個字 ✓</button>
+    </div>
+  `;
+  
+  setupCanvas();
+  
+  document.getElementById('guideBtn').onclick = () => {
+    document.getElementById('modelChar').style.color = '#E5E7EB';
+  };
+  document.getElementById('hideBtn').onclick = () => {
+    document.getElementById('modelChar').style.color = 'transparent';
+  };
+  document.getElementById('clearBtn').onclick = () => {
+    ctx.clearRect(0, 0, 360, 360);
+    drawGrid();
+  };
+  document.getElementById('doneCharBtn').onclick = () => {
+    currentWriteIdx++;
+    renderWriteChar();
+  };
+}
+
+function drawGrid() {
+  ctx.strokeStyle = '#FBCFE8';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([7, 7]);
+  ctx.beginPath();
+  ctx.moveTo(180, 0);
+  ctx.lineTo(180, 360);
+  ctx.moveTo(0, 180);
+  ctx.lineTo(360, 180);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#FF6B35';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(1.5, 1.5, 357, 357);
+}
+
+function setupCanvas() {
+  canvas = document.getElementById('pad');
+  ctx = canvas.getContext('2d');
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#1F2937';
+  ctx.lineWidth = 9;
+  drawGrid();
+  
+  const pos = e => {
+    const r = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return {
+      x: (t.clientX - r.left) * 360 / r.width,
+      y: (t.clientY - r.top) * 360 / r.height
+    };
+  };
+  
+  canvas.onpointerdown = e => {
+    e.preventDefault();
+    drawing = true;
+    last = pos(e);
+    canvas.setPointerCapture(e.pointerId);
+  };
+  canvas.onpointermove = e => {
+    if (!drawing) return;
+    const p = pos(e);
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    last = p;
+  };
+  const end = () => drawing = false;
+  canvas.onpointerup = end;
+  canvas.onpointercancel = end;
+}
+
+/* ========== 流程控制 ========== */
+function nextQ() {
+  qi++;
+  if (qi >= 20) {
+    startBreak();
+  } else {
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+let timer = null, remain = 900, paused = false;
+
+function startBreak() {
+  document.getElementById('quiz').innerHTML = '';
+  document.getElementById('breakBox').classList.remove('hide');
+  remain = 900;
+  paused = false;
+  updateClock();
+  clearInterval(timer);
+  timer = setInterval(() => {
+    if (paused) return;
+    remain--;
+    updateClock();
+    if (remain <= 0) {
+      clearInterval(timer);
+      document.getElementById('breakDone').classList.remove('hide');
+    }
+  }, 1000);
+}
+
+function updateClock() {
+  const m = String(Math.floor(remain / 60)).padStart(2, '0');
+  const s = String(remain % 60).padStart(2, '0');
+  document.getElementById('clock').textContent = m + ':' + s;
+  document.getElementById('breakProg').style.width = (remain / 900 * 100) + '%';
+}
+
+document.getElementById('pauseBtn').onclick = e => {
+  paused = !paused;
+  e.target.textContent = paused ? '▶️ 繼續' : '⏸ 暫停';
+};
+document.getElementById('skipBtn').onclick = () => {
+  clearInterval(timer);
+  document.getElementById('breakDone').classList.remove('hide');
+};
+document.getElementById('nextRoundBtn').onclick = () => {
+  document.getElementById('breakBox').classList.add('hide');
+  document.getElementById('breakDone').classList.add('hide');
+  qi = 0;
+  score = 0;
+  covered = new Set();
+  render();
+  window.scrollTo({ top: 0 });
+};
+document.getElementById('finishBtn').onclick = () => {
+  document.getElementById('breakBox').classList.add('hide');
+  showDone();
+};
+document.getElementById('restartBtn').onclick = () => {
+  document.getElementById('doneBox').classList.add('hide');
+  qi = 0;
+  score = 0;
+  covered = new Set();
+  wrongWords = [];
+  render();
+};
+
+function showDone() {
+  document.getElementById('doneBox').classList.remove('hide');
+  document.getElementById('finalScoreNum').textContent = `${score} / 20`;
+  document.getElementById('finalScore').textContent =
+    `本輪答對 ${score} / 20 題，已涵蓋 ${covered.size} / 49 字。`;
+  
+  const ws = document.getElementById('wrongSummary');
+  if (wrongWords.length === 0) {
+    ws.innerHTML = '<p style="color:#059669;font-weight:800;font-size:17px">🌈 全部答對，太棒了！</p>';
+  } else {
+    ws.innerHTML = `<p style="font-weight:800;margin-bottom:8px">需要複習的詞語（${wrongWords.length} 個）：</p><ul>` +
+      wrongWords.map(w => `<li><b>${w}</b> — ${wordMap[w][2]}</li>`).join('') + '</ul>';
+  }
+  saveWrong();
+}
+
+/* ========== 複習錯字模式 ========== */
+document.getElementById('reviewWrongBtn').onclick = () => {
+  const stored = loadWrong();
+  if (stored.length === 0 && wrongWords.length === 0) {
+    alert('目前沒有記錄到錯字，繼續加油！🎉');
+    return;
+  }
+  reviewQueue = stored.length ? stored : [...wrongWords];
+  reviewIdx = 0;
+  document.getElementById('doneBox').classList.add('hide');
+  document.getElementById('quiz').innerHTML = '';
+  document.getElementById('reviewBox').classList.remove('hide');
+  startReviewChar();
+};
+
+document.getElementById('exitReviewBtn').onclick = () => {
+  document.getElementById('reviewBox').classList.add('hide');
+  document.getElementById('doneBox').classList.remove('hide');
+};
+
+function startReviewChar() {
+  const box = document.getElementById('reviewContent');
+  if (reviewIdx >= reviewQueue.length) {
+    box.innerHTML = `
+      <p style="text-align:center;font-weight:800;color:#059669;font-size:18px;margin:16px 0">
+        🌈 複習完成！全部 ${reviewQueue.length} 個詞語都寫過了。
+      </p>
+    `;
+    return;
+  }
+  const word = reviewQueue[reviewIdx];
+  const meta = wordMap[word];
+  const chars = meta[1].split(',');
+  
+  currentChars = chars.map(ch => ({ word, char: ch }));
+  currentWriteIdx = 0;
+  
+  box.innerHTML = `
+    <div class="qtitle">複習：${word} <span class="badge">${reviewIdx + 1} / ${reviewQueue.length}</span></div>
+    <div class="write-meta">
+      <b>拆字：</b>${meta[2]}<br>
+      <b>易錯：</b><span class="red">${meta[3]}</span>
+    </div>
+    <div id="writeInfo"></div>
+  `;
+  renderWriteCharForReview();
+}
+
+function renderWriteCharForReview() {
+  const info = document.getElementById('writeInfo');
+  if (currentWriteIdx >= currentChars.length) {
+    info.innerHTML = `
+      <p style="text-align:center;font-weight:800;color:#059669;font-size:16px">這個詞寫完了！</p>
+      <div class="btn-row">
+        <button class="btn btn2" id="nextReviewBtn">下一個詞 →</button>
+      </div>
+    `;
+    document.getElementById('nextReviewBtn').onclick = () => {
+      reviewIdx++;
+      startReviewChar();
+    };
+    return;
+  }
+  const item = currentChars[currentWriteIdx];
+  info.innerHTML = `
+    <div style="text-align:center;font-weight:800;color:#7C3AED">第 ${currentWriteIdx + 1} / ${currentChars.length} 字</div>
+    <div class="bigchar" id="modelChar" style="color:#E5E7EB">${item.char}</div>
+    <div class="mode-btns">
+      <button class="btn btn-ghost" id="guideBtn">👁 指導模式</button>
+      <button class="btn btn-ghost" id="hideBtn">⬜ 白板模式</button>
+      <button class="btn btn-ghost" id="clearBtn">🗑 清除</button>
+    </div>
+    <canvas id="pad" width="360" height="360"></canvas>
+    <div class="btn-row">
+      <button class="btn btn2" id="doneCharBtn">完成這個字 ✓</button>
+    </div>
+  `;
+  setupCanvas();
+  document.getElementById('guideBtn').onclick = () => document.getElementById('modelChar').style.color = '#E5E7EB';
+  document.getElementById('hideBtn').onclick = () => document.getElementById('modelChar').style.color = 'transparent';
+  document.getElementById('clearBtn').onclick = () => { ctx.clearRect(0,0,360,360); drawGrid(); };
+  document.getElementById('doneCharBtn').onclick = () => {
+    currentWriteIdx++;
+    renderWriteCharForReview();
+  };
+}
+
+/* ========== 啟動 ========== */
+render();
+</script>
+</body>
+</html>
