@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APSW | 單元二測驗 - 成語 (8選1) 書面語</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#e9e9e9;font-family:"PingFang HK","Microsoft JhengHei","Noto Sans TC",sans-serif;color:#111}
+  .page{max-width:900px;margin:24px auto;background:#fff;padding:36px 40px;box-shadow:0 4px 20px rgba(0,0,0,.12)}
+  .top{border-bottom:3px double #111;padding-bottom:12px;text-align:center}
+  .top h1{margin:0;font-size:28px;letter-spacing:2px}
+  .top p{margin:6px 0 0;font-size:15px}
+  .info{margin:18px 0;display:flex;flex-wrap:wrap;gap:12px 28px;font-size:15px;border:1px solid #111;padding:12px 14px}
+  .instr{border:1px solid #111;padding:10px 14px;font-size:14px;line-height:1.7;background:#f9f9f9}
+  .q{border-bottom:1px solid #ddd;padding:18px 4px}
+  .q:last-child{border-bottom:none}
+  .q-head{display:flex;gap:12px;align-items:flex-start}
+  .num{flex:0 0 32px;width:32px;height:32px;border:1.5px solid #111;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+  .sentence{font-size:18px;line-height:1.8;margin:2px 0 12px}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:600px){.options{grid-template-columns:1fr}}
+  .opt{border:1.5px solid #bbb;padding:10px 12px;cursor:pointer;display:flex;gap:10px;align-items:center;font-size:17px;background:#fff}
+  .opt:hover{border-color:#111}
+  .opt input{accent-color:#111;width:18px;height:18px;cursor:pointer}
+  .opt.selected{border-color:#111;background:#f5f5f5;font-weight:700}
+  .opt.correct{border-color:#0a7a42;background:#eafff1}
+  .opt.wrong{border-color:#c00;background:#fff0f0}
+  .mark{font-size:13px;color:#555}
+  .feedback{font-size:15px;margin-top:10px;display:none;line-height:1.6}
+  .feedback.show{display:block}
+  .feedback.correct{color:#0a7a42}
+  .feedback.wrong{color:#c00}
+  .actions{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  button{font-size:16px;padding:11px 22px;cursor:pointer;border:1.5px solid #111;background:#111;color:#fff;font-family:inherit}
+  button.secondary{background:#fff;color:#111}
+  button:hover{opacity:.88}
+  #result{display:none;margin-top:20px;border:2px solid #111;padding:16px;text-align:center}
+  #result h2{margin:0 0 8px;font-size:22px}
+  #result p{margin:4px 0;font-size:16px}
+  .footer{margin-top:18px;text-align:center;font-size:14px;letter-spacing:4px}
+  @media(max-width:600px){.page{padding:22px 18px;margin:0}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top">
+    <h1>APSW　｜　單元二測驗</h1>
+    <p>科目：中文科　｜　單元：單元二 成語　｜　每題 8 選 1　｜　書面語</p>
+  </div>
+  <div class="info">
+    <span>姓名：________________</span>
+    <span>班別：________</span>
+    <span>學號：________</span>
+    <span>日期：________________</span>
+    <span>時間：20分鐘</span>
+    <span>總分：24分</span>
+  </div>
+  <div class="instr">
+    <b>試卷指示</b><br>
+    每題有 8 個選項，請選出最適當的一個成語，圈出答案。每題2分，共24分。考試期間不得發問，不得偷看答案。
+  </div>
+  <div id="questions"></div>
+  <div class="actions">
+    <button onclick="check()">交卷 / 對答案</button>
+    <button class="secondary" onclick="resetQuiz()">重新考試</button>
+  </div>
+  <div id="result">
+    <h2 id="scoreTitle">成績</h2>
+    <p id="scoreText"></p>
+    <p id="scoreMsg"></p>
+  </div>
+  <div class="footer">—　試卷完　—</div>
+</div>
+<script>
+const data = [
+  { s: "比賽進行到最後一秒，兩隊打成平手，整場比賽的勝負就", e: "。", a: "一髮千鈞" },
+  { s: "他聽到自己考到第一名，", e: "，足足一分鐘都說不出話來。", a: "目瞪口呆" },
+  { s: "公司傳出裁員的消息後，", e: "，大家都擔心自己會被解僱。", a: "人心惶惶" },
+  { s: "看見同學被欺負，他毫不猶豫", e: "，為同學出頭。", a: "挺身而出" },
+  { s: "面對這條這麼難的數學題，他", e: "，只好交白卷。", a: "束手無策" },
+  { s: "他平時不溫習，考試的時候", e: "，什麼都答不出來。", a: "胸無點墨" },
+  { s: "他們是", e: "的好朋友，什麼秘密都會告訴對方。", a: "推心置腹" },
+  { s: "老師勸了他很多次，他都", e: "，繼續玩遊戲，不做功課。", a: "充耳不聞" },
+  { s: "他的手工", e: "，用廢紙也可以做出很漂亮的燈籠。", a: "別出心裁" },
+  { s: "他經過便利店，看見一支筆沒有人看管，就", e: "地偷走了。", a: "順手牽羊" },
+  { s: "考試前一晚，我和媽媽", e: "，把所有壓力都說了出來。", a: "促膝談心" },
+  { s: "香港和內地的經濟", e: "，互相影響。", a: "脣齒相依" }
+];
+const all = data.map(d=>d.a);
+function shuffled(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+const wrap=document.getElementById("questions");
+data.forEach((q,i)=>{
+  const others = shuffled(all.filter(x=>x!==q.a)).slice(0,7);
+  const opts = shuffled([q.a, ...others]);
+  const letters = ["A","B","C","D","E","F","G","H"];
+  let optsHtml = opts.map((opt,idx)=>`
+    <label class="opt" data-q="${i}" data-val="${opt}">
+      <input type="radio" name="q${i}" value="${opt}"> <b>${letters[idx]}.</b> ${opt}
+    </label>`).join("");
+  const div=document.createElement("div");
+  div.className="q";
+  div.innerHTML=`
+    <div class="q-head">
+      <div class="num">${i+1}</div>
+      <div style="flex:1">
+        <div class="sentence">${i+1}. ${q.s} ________ ${q.e} <span class="mark">（2分）</span></div>
+        <div class="options">${optsHtml}</div>
+        <div class="feedback" id="fb-${i}"></div>
+      </div>
+    </div>`;
+  wrap.appendChild(div);
+});
+document.addEventListener("change", e=>{
+  if(e.target.type==="radio"){
+    const name=e.target.name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r=>{
+      r.closest(".opt").classList.remove("selected");
+    });
+    e.target.closest(".opt").classList.add("selected");
+  }
+});
+function check(){
+  let correct=0;
+  data.forEach((q,i)=>{
+    const checked=document.querySelector(`input[name="q${i}"]:checked`);
+    const fb=document.getElementById("fb-"+i);
+    const user=checked?checked.value:"";
+    document.querySelectorAll(`label[data-q="${i}"]`).forEach(l=>{
+      l.classList.remove("correct","wrong");
+      if(l.dataset.val===q.a) l.classList.add("correct");
+      if(user && l.dataset.val===user && user!==q.a) l.classList.add("wrong");
+    });
+    if(user===q.a){ correct++; fb.className="feedback show correct"; fb.textContent="✓ 答對了"; }
+    else { fb.className="feedback show wrong"; fb.textContent = user ? `✗ 你選了「${user}」，正確答案：「${q.a}」` : `✗ 未作答，正確答案：「${q.a}」`; }
+  });
+  const res=document.getElementById("result");
+  res.style.display="block";
+  document.getElementById("scoreTitle").textContent=`成績： ${correct} / 12 題`;
+  document.getElementById("scoreText").textContent=`總分：${correct*2} / 24 分`;
+  let msg= correct===12 ? "全部答對！表現非常出色！" : correct>=9 ? "表現很好，再努力一點就可以滿分！" : correct>=6 ? "繼續努力，多溫習幾次就會熟練！" : "不要灰心，看看課本再試一次！";
+  document.getElementById("scoreMsg").textContent=msg;
+  res.scrollIntoView({behavior:"smooth"});
+}
+function resetQuiz(){
+  document.querySelectorAll('input[type="radio"]').forEach(r=>r.checked=false);
+  document.querySelectorAll(".opt").forEach(o=>o.classList.remove("selected","correct","wrong"));
+  document.querySelectorAll(".feedback").forEach(f=>{f.className="feedback"; f.textContent="";});
+  document.getElementById("result").style.display="none";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+</script>
+</body>
+</html>
