@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>友愛真神奇 · 老師讀默書</title>
+<style>
+  :root {
+    --bg: #FFF8F0;
+    --card: #FFFFFF;
+    --primary: #FF8C42;
+    --primary-dark: #E67A30;
+    --good: #27AE60;
+    --ink: #2C3E50;
+    --light: #FFF3E6;
+    --border: #FFE0B2;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: "PingFang HK", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    margin: 0; background: var(--bg); color: var(--ink);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  header {
+    background: linear-gradient(135deg, #FF8C42, #FFB347);
+    color: #fff; padding: 18px 16px 16px; text-align: center;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 3px 14px rgba(255,140,66,0.3);
+  }
+  header h1 { margin: 0; font-size: 22px; font-weight: 800; }
+  header p { margin: 6px 0 0; font-size: 14px; opacity: 0.95; }
+
+  .wrap { max-width: 520px; margin: 0 auto; padding: 14px 14px 90px; }
+
+  .card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 20px 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+  }
+
+  .mode-switch {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .mode-switch button {
+    flex: 1;
+    padding: 16px 8px;
+    border-radius: 14px;
+    border: 3px solid #eee;
+    background: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    color: #888;
+    cursor: pointer;
+  }
+  .mode-switch button.on {
+    border-color: var(--primary);
+    background: #FFF5EB;
+    color: var(--primary-dark);
+  }
+
+  .status-box {
+    background: var(--light);
+    border-radius: 16px;
+    padding: 28px 16px;
+    text-align: center;
+    margin: 12px 0 18px;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .status-main {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .status-sub {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.5;
+  }
+  .status-progress {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-top: 10px;
+  }
+
+  .btn-main {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    border: none;
+    border-radius: 16px;
+    font-size: 20px;
+    font-weight: 800;
+    cursor: pointer;
+    background: var(--good);
+    color: #fff;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 0 #1e8449;
+  }
+  .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0 #1e8449; }
+  .btn-main.orange {
+    background: var(--primary);
+    box-shadow: 0 4px 0 #c96a20;
+  }
+  .btn-main.orange:active { box-shadow: 0 2px 0 #c96a20; }
+  .btn-main:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .btn-sec {
+    flex: 1;
+    padding: 14px 8px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    background: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .btn-sec:active { background: #f5f5f5; }
+
+  .answer-box {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    background: #E8F8F0;
+    border-radius: 16px;
+    border: 3px solid var(--good);
+    margin: 14px 0;
+  }
+  .answer-box.show { display: block; }
+  .answer-box .label { font-size: 14px; color: #666; margin-bottom: 6px; }
+  .answer-box .word {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: 8px;
+    color: #1A7A4A;
+    margin: 8px 0 16px;
+  }
+
+  .select-row { margin-bottom: 14px; }
+  .select-row label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #666;
+    margin-bottom: 6px;
+  }
+  select {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    background: #fff;
+    font-weight: 600;
+  }
+
+  .progress-bar-wrap { margin: 16px 0 8px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 6px;
+  }
+  .progress-track {
+    height: 8px;
+    background: #eee;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 99px;
+    transition: width 0.3s;
+    width: 0%;
+  }
+
+  .tip {
+    font-size: 13px;
+    color: #888;
+    text-align: center;
+    margin-top: 16px;
+    line-height: 1.6;
+  }
+
+  footer {
+    text-align: center;
+    padding: 12px;
+    font-size: 12px;
+    color: #bbb;
+  }
+
+  .advanced {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #eee;
+  }
+  .advanced summary {
+    font-size: 13px;
+    color: #999;
+    cursor: pointer;
+    list-style: none;
+  }
+  .advanced summary::-webkit-details-marker { display: none; }
+  .pause-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .pause-row label {
+    flex: 1;
+    font-size: 13px;
+    color: #666;
+  }
+  .pause-row select {
+    margin-top: 4px;
+    padding: 8px;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>老師讀默書</h1>
+  <p>友愛真神奇 · 聖誕節 · 小四 · 紙上寫</p>
+</header>
+
+<div class="wrap">
+  <div class="card">
+
+    <div class="mode-switch">
+      <button class="on" id="btnWords" onclick="setMode('words')">默詞語<br><small style="font-weight:600;opacity:0.8">講 3 次</small></button>
+      <button id="btnPara" onclick="setMode('para')">默段落<br><small style="font-weight:600;opacity:0.8">每節講 2 次</small></button>
+    </div>
+
+    <div class="select-row">
+      <label id="selectLabel">揀詞語</label>
+      <select id="sel" onchange="prepare()"></select>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-label">
+        <span id="progText">準備好</span>
+        <span id="progCount">0 / 0</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progFill"></div>
+      </div>
+    </div>
+
+    <div class="status-box" id="statusBox">
+      <div class="status-main" id="statusMain">準備開始</div>
+      <div class="status-sub" id="statusSub">揀好內容後，㩒下面綠色掣</div>
+      <div class="status-progress" id="statusProg"></div>
+    </div>
+
+    <button class="btn-main" id="btnMain" onclick="onMainClick()">▶ 開始朗讀</button>
+
+    <div class="btn-row" id="secRow">
+      <button class="btn-sec" id="btnPause" onclick="togglePause()">⏸ 暫停</button>
+      <button class="btn-sec" onclick="doRepeat()">↺ 再講一次</button>
+      <button class="btn-sec" onclick="doStop()">⏹ 停止</button>
+    </div>
+
+    <div class="answer-box" id="answerBox">
+      <div class="label">正確答案</div>
+      <div class="word" id="answerWord"></div>
+      <button class="btn-main" style="margin:0" onclick="afterCheck()">睇完 · 下一組 →</button>
+    </div>
+
+    <details class="advanced">
+      <summary>⚙ 調整停頓時間（可選）</summary>
+      <div class="pause-row">
+        <label>詞語停頓
+          <select id="wordPause">
+            <option value="1500">1.5 秒</option>
+            <option value="2500" selected>2.5 秒</option>
+            <option value="3500">3.5 秒</option>
+          </select>
+        </label>
+        <label>段落停頓
+          <select id="paraPause">
+            <option value="3000">3 秒</option>
+            <option value="5000" selected>5 秒</option>
+            <option value="7000">7 秒</option>
+          </select>
+        </label>
+      </div>
+    </details>
+
+    <p class="tip" id="tipText">
+      小朋友用紙筆寫。畫面唔會顯示答案。<br>
+      聽完 3 次 → 寫 → 再㩒掣睇答案。
+    </p>
+  </div>
+</div>
+
+<footer>紙上默書 · 答案預設隱藏</footer>
+
+<script>
+const WORDS = [
+  "看聖誕燈飾","送聖誕禮物","送聖誕卡","佈置聖誕樹","吃聖誕大餐",
+  "火雞","聖誕大餐","聖誕樹","聖誕燈飾","聖誕禮物","聖誕卡","聖誕老人",
+  "聖誕快樂","新年快樂","新年進步",
+  "陰涼","高興","搖擺","笑臉","友愛","變得",
+  "頂","飄","爭","更"
+];
+
+const POEM = [
+  "小鳥說：「別爭，別爭，還是給太陽戴吧，太陽比我們更熱啊！」大家都同意了。",
+  "風兒把雲帽子送給了太陽。太陽戴上了烏黑的雲帽子。",
+  "一下子，天變得陰陰涼涼，還刷刷地下起了小雨。",
+  "小草高興得搖搖擺擺，小花高興得綻開笑臉，小鳥高興得邊飛邊唱：「友愛真神奇啊！」"
+];
+
+let mode = 'words';
+let queue = [];
+let idx = 0;
+let repeatCount = 0;
+let playing = false;
+let paused = false;
+let timer = null;
+let state = 'idle';
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btnWords').classList.toggle('on', m === 'words');
+  document.getElementById('btnPara').classList.toggle('on', m === 'para');
+  document.getElementById('selectLabel').textContent = m === 'words' ? '揀詞語' : '揀段落';
+  document.getElementById('tipText').innerHTML = m === 'words'
+    ? '小朋友用紙筆寫。畫面唔會顯示答案。<br>聽完 3 次 → 寫 → 再㩒掣睇答案。'
+    : '按逗號同句號停頓。每節講 2 次。<br>寫完先㩒「我寫完啦」先繼續。';
+  // force rebuild select
+  document.getElementById('sel').dataset.mode = '';
+  prepare();
+}
+
+function prepare() {
+  stopAll(false);
+  const sel = document.getElementById('sel');
+
+  if (sel.dataset.mode !== mode) {
+    sel.innerHTML = '';
+    sel.dataset.mode = mode;
+    if (mode === 'words') {
+      const o = document.createElement('option');
+      o.value = 'all';
+      o.textContent = '▶ 全部詞語（25 個）';
+      sel.appendChild(o);
+      WORDS.forEach((w, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = (i + 1) + '. ' + w;
+        sel.appendChild(opt);
+      });
+    } else {
+      const o = document.createElement('option');
+      o.value = 'all';
+      o.textContent = '▶ 成篇課文（4 段）';
+      sel.appendChild(o);
+      POEM.forEach((p, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = '第 ' + (i + 1) + ' 段';
+        sel.appendChild(opt);
+      });
+    }
+  }
+
+  queue = buildQueue();
+  idx = 0;
+  repeatCount = 0;
+  state = 'idle';
+  updateUI();
+}
+
+function buildQueue() {
+  const val = document.getElementById('sel').value;
+  if (mode === 'words') {
+    if (val === 'all') return [...WORDS];
+    return [WORDS[parseInt(val)]];
+  } else {
+    if (val === 'all') return POEM.flatMap(p => splitPara(p));
+    return splitPara(POEM[parseInt(val)]);
+  }
+}
+
+function splitPara(text) {
+  const parts = text.split(/([，。！？、；：])/).filter(Boolean);
+  const segs = [];
+  let cur = '';
+  for (let i = 0; i < parts.length; i++) {
+    cur += parts[i];
+    if (/[，。！？、；：]/.test(parts[i])) {
+      segs.push(cur.trim());
+      cur = '';
+    }
+  }
+  if (cur.trim()) segs.push(cur.trim());
+
+  const out = [];
+  segs.forEach(s => {
+    const clean = s.replace(/[，。！？、；：]/g, '');
+    if (clean.length > 10) {
+      const mid = Math.ceil(clean.length / 2);
+      const punct = (s.match(/[，。！？、；：]$/) || [''])[0];
+      out.push(clean.slice(0, mid));
+      out.push(clean.slice(mid) + punct);
+    } else {
+      out.push(s);
+    }
+  });
+  return out.filter(Boolean);
+}
+
+function updateUI() {
+  const total = queue.length || 1;
+  const current = Math.min(idx + 1, total);
+  const pct = state === 'done' ? 100 : (idx / total) * 100;
+
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progCount').textContent = (state === 'done' ? total : idx) + ' / ' + total;
+  document.getElementById('progText').textContent =
+    state === 'done' ? '全部完成' :
+    state === 'idle' ? '準備好' : '進行中';
+
+  const mainBtn = document.getElementById('btnMain');
+  const answerBox = document.getElementById('answerBox');
+  answerBox.classList.remove('show');
+  mainBtn.style.display = 'block';
+
+  if (state === 'idle') {
+    document.getElementById('statusMain').textContent = '準備開始';
+    document.getElementById('statusSub').textContent = mode === 'words'
+      ? '㩒綠色掣，每個詞會講 3 次'
+      : '㩒綠色掣，按停頓位分段朗讀';
+    document.getElementById('statusProg').textContent = '';
+    mainBtn.textContent = '▶ 開始朗讀';
+    mainBtn.className = 'btn-main';
+    mainBtn.disabled = false;
+  }
+  else if (state === 'speaking') {
+    document.getElementById('statusMain').textContent = '✎ 請聽寫';
+    document.getElementById('statusSub').textContent = mode === 'words'
+      ? '聽住，喺紙上寫呢個詞'
+      : '聽住，喺紙上寫呢一節';
+    const totalRep = mode === 'words' ? 3 : 2;
+    document.getElementById('statusProg').textContent =
+      '第 ' + current + ' / ' + total + ' 節　·　第 ' + (repeatCount + 1) + ' / ' + totalRep + ' 次';
+    mainBtn.textContent = '朗讀中…';
+    mainBtn.className = 'btn-main';
+    mainBtn.disabled = true;
+  }
+  else if (state === 'waitAnswer') {
+    document.getElementById('statusMain').textContent = '寫完未？';
+    document.getElementById('statusSub').textContent = '寫完就㩒下面掣睇答案';
+    document.getElementById('statusProg').textContent = '第 ' + current + ' / ' + total + ' 節';
+    mainBtn.textContent = '👁 睇答案';
+    mainBtn.className = 'btn-main orange';
+    mainBtn.disabled = false;
+  }
+  else if (state === 'waitWrite') {
+    document.getElementById('statusMain').textContent = '慢慢寫';
+    document.getElementById('statusSub').textContent = '寫完先㩒下面掣繼續';
+    document.getElementById('statusProg').textContent = '第 ' + current + ' / ' + total + ' 節';
+    mainBtn.textContent = '✎ 我寫完啦，下一節 →';
+    mainBtn.className = 'btn-main orange';
+    mainBtn.disabled = false;
+  }
+  else if (state === 'done') {
+    document.getElementById('statusMain').textContent = '完成！👏';
+    document.getElementById('statusSub').textContent = '請家長檢查紙上面寫得啱唔啱';
+    document.getElementById('statusProg').textContent = '';
+    mainBtn.textContent = '↺ 再默一次';
+    mainBtn.className = 'btn-main';
+    mainBtn.disabled = false;
+  }
+}
+
+function onMainClick() {
+  if (state === 'idle' || state === 'done') {
+    start();
+  } else if (state === 'waitAnswer') {
+    document.getElementById('answerWord').textContent = queue[idx];
+    document.getElementById('answerBox').classList.add('show');
+    document.getElementById('statusMain').textContent = '對一對答案';
+    document.getElementById('statusSub').textContent = '睇完再㩒「下一組」';
+    document.getElementById('btnMain').style.display = 'none';
+  } else if (state === 'waitWrite') {
+    idx++;
+    repeatCount = 0;
+    if (idx >= queue.length) {
+      state = 'done';
+      playing = false;
+      updateUI();
+    } else {
+      state = 'speaking';
+      updateUI();
+      speakCurrent();
+    }
+  }
+}
+
+function afterCheck() {
+  document.getElementById('answerBox').classList.remove('show');
+  document.getElementById('btnMain').style.display = 'block';
+  idx++;
+  repeatCount = 0;
+  if (idx >= queue.length) {
+    state = 'done';
+    playing = false;
+    updateUI();
+  } else {
+    state = 'speaking';
+    updateUI();
+    speakCurrent();
+  }
+}
+
+function start() {
+  queue = buildQueue();
+  if (!queue.length) return;
+  idx = 0;
+  repeatCount = 0;
+  playing = true;
+  paused = false;
+  state = 'speaking';
+  document.getElementById('btnPause').textContent = '⏸ 暫停';
+  updateUI();
+  speakCurrent();
+}
+
+function speakCurrent() {
+  if (!playing || paused) return;
+  if (idx >= queue.length) {
+    state = 'done';
+    playing = false;
+    updateUI();
+    return;
+  }
+
+  const text = queue[idx];
+  const totalRep = mode === 'words' ? 3 : 2;
+  const pause = parseInt(mode === 'words'
+    ? document.getElementById('wordPause').value
+    : document.getElementById('paraPause').value);
+
+  state = 'speaking';
+  updateUI();
+
+  speak(text, () => {
+    if (!playing || paused) return;
+    repeatCount++;
+    if (repeatCount < totalRep) {
+      timer = setTimeout(() => speakCurrent(), pause);
+    } else {
+      if (mode === 'words') {
+        state = 'waitAnswer';
+      } else {
+        state = 'waitWrite';
+      }
+      updateUI();
+    }
+  });
+}
+
+function speak(text, cb) {
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'yue-Hant-HK';
+    u.rate = mode === 'para' ? 0.70 : 0.80;
+    u.onend = () => { if (cb) cb(); };
+    u.onerror = () => { if (cb) cb(); };
+    setTimeout(() => speechSynthesis.speak(u), 50);
+  } catch (e) {
+    if (cb) cb();
+  }
+}
+
+function togglePause() {
+  if (!playing) return;
+  paused = !paused;
+  document.getElementById('btnPause').textContent = paused ? '▶ 繼續' : '⏸ 暫停';
+  if (paused) {
+    speechSynthesis.cancel();
+    if (timer) clearTimeout(timer);
+  } else {
+    speakCurrent();
+  }
+}
+
+function doRepeat() {
+  if (state === 'idle' || state === 'done') return;
+  speechSynthesis.cancel();
+  if (timer) clearTimeout(timer);
+  repeatCount = 0;
+  state = 'speaking';
+  paused = false;
+  playing = true;
+  document.getElementById('btnPause').textContent = '⏸ 暫停';
+  document.getElementById('answerBox').classList.remove('show');
+  document.getElementById('btnMain').style.display = 'block';
+  updateUI();
+  speakCurrent();
+}
+
+function doStop() {
+  stopAll(true);
+}
+
+function stopAll(update) {
+  playing = false;
+  paused = false;
+  state = 'idle';
+  if (timer) clearTimeout(timer);
+  speechSynthesis.cancel();
+  document.getElementById('btnPause').textContent = '⏸ 暫停';
+  document.getElementById('answerBox').classList.remove('show');
+  document.getElementById('btnMain').style.display = 'block';
+  if (update) updateUI();
+}
+
+setMode('words');
+</script>
+</body>
+</html>
